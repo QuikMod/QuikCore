@@ -1,0 +1,27 @@
+apply plugin: 'java'
+
+sourceCompatibility = '1.8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+	shade
+	compile.extendsFrom shade
+}
+
+dependencies {
+	shade 'org.reflections:reflections:0.9.10'
+	shade 'com.google.code.gson:gson:2.6.2'
+    testCompile 'junit:junit:4.12'
+}
+
+jar {
+    configurations.shade.copyRecursive().setTransitive(false).each { artifact ->
+		from (zipTree(artifact)) {
+			exclude 'META-INF', 'META-INF/**'
+		}
+	}
+}
