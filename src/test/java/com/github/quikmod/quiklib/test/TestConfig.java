@@ -2,7 +2,7 @@
  */
 package com.github.quikmod.quiklib.test;
 
-import com.github.quickmod.quiklib.core.QuikCore;
+import com.github.quikmod.quiklib.core.QuikCore;
 import com.github.quikmod.quiklib.test.config.DummyConfig;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -45,7 +45,6 @@ public class TestConfig {
 		QuikCore.getConfig().load();
 		QuikCore.getCoreLogger().info(QuikCore.getConfig().toString());
 		QuikCore.getCoreLogger().info(DummyConfig.asString());
-		QuikCore.getConfig().addConfigurable(DummyConfig.class);
 		QuikCore.getCoreLogger().info(DummyConfig.asString());
 		QuikCore.getConfig().save();
 	}
