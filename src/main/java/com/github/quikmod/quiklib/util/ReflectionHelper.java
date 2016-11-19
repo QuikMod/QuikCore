@@ -5,9 +5,12 @@ package com.github.quikmod.quiklib.util;
 import com.github.quikmod.quiklib.core.QuikCore;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * A class to aid in the execution of reflection magic.
@@ -76,6 +79,13 @@ public class ReflectionHelper {
 				consumer.accept(f);
 			}
 		}
+	}
+	
+	public static Stream<Method> streamMethods(Object from) {
+		final boolean isInstance = !(from instanceof Class);
+		final Class clazz = isInstance ? from.getClass() : (Class) from;
+		final Stream<Method> methods = Arrays.stream(clazz.getDeclaredMethods());
+		return isInstance ? methods : methods.filter(m -> Modifier.isStatic(m.getModifiers()));
 	}
 
 }

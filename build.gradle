@@ -13,9 +13,14 @@ configurations {
 }
 
 dependencies {
+	shade 'com.googlecode.concurrent-trees:concurrent-trees:2.6.0'
+	shade 'com.googlecode.concurrent-trees:concurrent-trees:2.6.0:javadoc'
 	shade 'org.reflections:reflections:0.9.10'
+	shade 'org.reflections:reflections:0.9.10:javadoc'
 	shade 'com.google.code.gson:gson:2.6.2'
+	shade 'com.google.code.gson:gson:2.6.2:javadoc'
     testCompile 'junit:junit:4.12'
+	testCompile 'junit:junit:4.12:javadoc'
 }
 
 jar {

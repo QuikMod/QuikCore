@@ -50,7 +50,7 @@ public class QuikDefaultLog implements QuikLogAdapter {
 
 	@Override
 	public void trace(Object source, Exception e) {
-		debug(source, "{0}", e);
+		e.printStackTrace();
 	}
 
 }

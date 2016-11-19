@@ -2,6 +2,8 @@
  */
 package com.github.quikmod.quiklib.core;
 
+import com.github.quikmod.quiklib.command.QuikCommand;
+import com.github.quikmod.quiklib.command.QuikCommandManager;
 import com.github.quikmod.quiklib.config.QuikConfig;
 import com.github.quikmod.quiklib.defaults.QuikDefaultConfig;
 import com.github.quikmod.quiklib.defaults.QuikDefaultLog;
@@ -34,6 +36,8 @@ public final class QuikCore {
 	
 	private static QuikConverterManager converters;
 	
+	private static QuikCommandManager commands;
+	
 	private static QuikConfig config;
 	
 	private QuikCore() {
@@ -43,6 +47,7 @@ public final class QuikCore {
 		QuikCore.init(new QuikDefaultLog(),
 				new QuikDefaultTranslator(),
 				new QuikConverterManager(),
+				new QuikCommandManager(),
 				new QuikDefaultConfig(Paths.get("config"))
 		);
 	}
@@ -51,6 +56,7 @@ public final class QuikCore {
 			QuikLogAdapter log,
 			QuikTranslationAdapter trans,
 			QuikConverterManager converters,
+			QuikCommandManager commands,
 			QuikConfigAdapter provider
 	) {
 		QuikCore.logManager = new QuikLogManager(log);
@@ -59,6 +65,7 @@ public final class QuikCore {
 		QuikLogger logger = QuikCore.getCoreLogger();
 		logger.info("Initializing core!");
 		QuikCore.converters = converters;
+		QuikCore.commands = commands;
 		logger.info("Saving config!");
 		QuikCore.config.save();
 		logger.info("Saved config!");
@@ -71,8 +78,10 @@ public final class QuikCore {
 				.setUrls(ClasspathHelper.forPackage("com.github.quikmod.quiklib"))
 				.setScanners(new FieldAnnotationsScanner(), new MethodAnnotationsScanner())
 		);
-		mirror.getFieldsAnnotatedWith(QuikConfigurable.class).forEach(f -> config.addConfigurable(f));
-		mirror.getMethodsAnnotatedWith(QuikConverter.class).forEach(m -> converters.addConverter(m));
+		mirror.getFieldsAnnotatedWith(QuikConfigurable.class).forEach(config::addConfigurable);
+		mirror.getMethodsAnnotatedWith(QuikConverter.class).forEach(converters::addConverter);
+		// Command addition must come after converter scanning.
+		mirror.getMethodsAnnotatedWith(QuikCommand.class).forEach(commands::attemptAddCommand);
 	}
 	
 	public static QuikLogger getCoreLogger() {
@@ -93,6 +102,10 @@ public final class QuikCore {
 	
 	public static QuikConverterManager getConverters() {
 		return converters;
+	}
+
+	public static QuikCommandManager getCommands() {
+		return commands;
 	}
 	
 	public static QuikConfig getConfig() {

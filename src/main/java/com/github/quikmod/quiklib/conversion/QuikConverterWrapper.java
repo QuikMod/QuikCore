@@ -40,7 +40,10 @@ public class QuikConverterWrapper {
 		if (toClass.isAssignableFrom(returnType)) {
 			try {
 				return Optional.ofNullable(toClass.cast(converter.invoke(null, value)));
-			} catch (InvocationTargetException | IllegalAccessException | IllegalArgumentException e) {
+			} catch (InvocationTargetException e) {
+				// Nothing to do here...
+				// This is just the converter refusing to convert.
+			} catch (IllegalAccessException | IllegalArgumentException e) {
 				QuikCore.getCoreLogger().trace(e);
 			}
 		}
