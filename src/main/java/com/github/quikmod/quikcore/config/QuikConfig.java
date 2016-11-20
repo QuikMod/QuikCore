@@ -57,7 +57,7 @@ public class QuikConfig {
 		}
 	}
 
-	public final synchronized boolean addConfigurable(Field f) {
+	public final synchronized boolean addConfigurableField(Field f) {
 		return Modifier.isStatic(f.getModifiers()) && configurables.get(null).add(f);
 	}
 

@@ -5,12 +5,15 @@
  */
 package com.github.quikmod.quikcore.command;
 
+import com.github.quikmod.quikcore.core.QuikCore;
+import com.github.quikmod.quikcore.util.ReflectionHelper;
 import com.github.quikmod.quikcore.util.Tokenizer;
 import com.googlecode.concurrenttrees.common.KeyValuePair;
 import com.googlecode.concurrenttrees.radix.ConcurrentRadixTree;
 import com.googlecode.concurrenttrees.radix.RadixTree;
 import com.googlecode.concurrenttrees.radix.node.concrete.DefaultCharArrayNodeFactory;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -25,10 +28,10 @@ import java.util.stream.StreamSupport;
  * @author RlonRyan
  */
 public final class QuikCommandManager {
-
+	
 	public static final String MARKER = "--";
 	public static final int MARKER_LENGTH = MARKER.length();
-
+	
 	private final RadixTree<QuikCommandWrapper> commands;
 
 	/**
@@ -90,6 +93,19 @@ public final class QuikCommandManager {
 				.filter(this::registerCommand);
 	}
 
+	/**
+	 * Iterates through all the methods in a given class and attempts to add them as @QuikCommands.
+	 *
+	 * @param clazz The class containing possible @QuikCommands.
+	 */
+	public void addCommands(Class clazz) {
+		for (Method m : clazz.getMethods()) {
+			if (m.isAnnotationPresent(QuikCommand.class)) {
+				this.attemptAddCommand(m);
+			}
+		}
+	}
+	
 	public QuikInvocationResult invoke(String input) {
 		Deque<String> tokens = Tokenizer.tokenize(input);
 		if (tokens.isEmpty()) {
@@ -99,12 +115,12 @@ public final class QuikCommandManager {
 		if (options.isEmpty()) {
 			return QuikInvocationResult.fromAmbiguous(input);
 		} else if (options.size() > 1) {
-			return QuikInvocationResult.fromAmbiguous(input, (String[])options.toArray());
+			return QuikInvocationResult.fromAmbiguous(input, (String[]) options.toArray());
 		} else {
 			return options.get(0).getValue().invoke(mapify(tokens));
 		}
 	}
-
+	
 	public Map<String, String> mapify(Deque<String> input) {
 		Map<String, String> args = new HashMap<>();
 		while (!input.isEmpty()) {
@@ -125,5 +141,5 @@ public final class QuikCommandManager {
 		}
 		return args;
 	}
-
+	
 }

@@ -6,11 +6,13 @@
 package com.github.quikmod.quikcore.defaults;
 
 import com.github.quikmod.quikcore.conversion.QuikConverter;
+import com.github.quikmod.quikcore.reflection.Quik;
 
 /**
  *
  * @author RlonRyan
  */
+@Quik
 public class QuikDefaultConverters {
 	
 	@QuikConverter
