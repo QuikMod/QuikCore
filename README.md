@@ -1,4 +1,4 @@
-# QuikCore
+# QuikCore [![build-status]][build-link]
 A better way to code MinecraftForge mods.
 
 ## Reasoning
@@ -20,3 +20,6 @@ QuikCore is designed after a foray into Spring Boot's annotation magic, where wi
 
 ## A Note on Generation
 QuikCore has no intention of generating all the code for you, like some other proposed mod solutions. Most of the time, said solutions generate tenuous code that lacks any expandability beyond the basics. QuikMod, on the other hand, simply aims to take care of some of the boilerplate stuff as to leave you free to focus on things like implementing those methane chickens. Bawk Bawk Boom. That's QuikMod + QuikCore for you.
+
+[build-link]:https://travis-ci.org/QuikMod/QuikCore
+[build-status]:https://travis-ci.org/QuikMod/QuikCore.svg?branch=master "Travis-CI Build Status"
