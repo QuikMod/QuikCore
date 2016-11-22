@@ -11,12 +11,15 @@ import com.github.quikmod.quikcore.config.QuikConfigAdapter;
 import com.github.quikmod.quikcore.conversion.QuikConverterManager;
 import com.github.quikmod.quikcore.lang.QuikTranslationAdapter;
 import com.github.quikmod.quikcore.log.QuikLogAdapter;
+import com.github.quikmod.quikcore.reflection.Quik;
 import com.github.quikmod.quikcore.reflection.QuikReflector;
+import com.github.quikmod.quikcore.reflection.QuikRegister;
 
 /**
  *
  * @author RlonRyan
  */
+@Quik
 public final class QuikCore {
 
 	private static QuikConfig config;
@@ -44,18 +47,25 @@ public final class QuikCore {
 		QuikCore.config = new QuikConfig(configAdaptor);
 		QuikLogger log = QuikCore.getCoreLogger();
 		log.info("QuikCore Initialized!");
-		log.info("Registering Default Loaders!");
-		QuikCore.reflector.registerLoader(converters::addConverters);
-		QuikCore.reflector.registerLoader(config::addConfigurable);
-		QuikCore.reflector.registerLoader(commands::addCommands);
-		log.info("Registered Default Loaders!");
 		QuikCore.reflector.performLoad();
+		long start = System.currentTimeMillis();
 		log.info("Loading config!");
 		QuikCore.config.load();
-		log.info("Loaded config!");
+		long end = System.currentTimeMillis();
+		log.info("Loaded config! ({0} ms)", end - start);
 		log.info("Saving config!");
+		start = System.currentTimeMillis();
 		QuikCore.config.save();
-		log.info("Saved config!");
+		end = System.currentTimeMillis();
+		log.info("Saved config! ({0} ms)", end - start);
+	}
+	
+	@QuikRegister
+	private static void registerClass(Class<?> clazz) {
+		QuikCore.converters.addConverters(clazz);
+		QuikCore.config.addConfigurable(clazz);
+		QuikCore.commands.addCommands(clazz);
+		QuikCore.getCoreLogger().info("Registered Core Registers!");
 	}
 
 	public static QuikLogger getCoreLogger() {

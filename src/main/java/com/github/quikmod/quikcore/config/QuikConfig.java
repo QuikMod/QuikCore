@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -105,9 +104,9 @@ public class QuikConfig {
 			} else if (obj instanceof Boolean) {
 				f.set(configurable, provider.getBoolean(config, key, category, (boolean) obj, comment));
 			} else if (obj instanceof Integer) {
-				f.set(configurable, provider.getInt(config, key, category, (int) obj, (int)anno.min(), (int)anno.max(), comment));
+				f.set(configurable, provider.getInt(config, key, category, (int) obj, (int) anno.min(), (int) anno.max(), comment));
 			} else if (obj instanceof Float) {
-				f.set(configurable, provider.getFloat(config, key, category, (float) obj, (float)anno.min(), (float)anno.max(), comment));
+				f.set(configurable, provider.getFloat(config, key, category, (float) obj, (float) anno.min(), (float) anno.max(), comment));
 			} else if (obj instanceof Double) {
 				f.set(configurable, provider.getDouble(config, key, category, (double) obj, anno.min(), anno.max(), comment));
 			} else {
@@ -121,8 +120,7 @@ public class QuikConfig {
 		}
 
 	}
-	
-	
+
 	public Stream<QuikConfigurable> getElements() {
 		return this.configurables
 				.values()
@@ -130,11 +128,11 @@ public class QuikConfig {
 				.flatMap(l -> l.stream())
 				.map(e -> e.getAnnotation(QuikConfigurable.class));
 	}
-	
+
 	public Set<String> getConfigs() {
 		return this.provider.getConfigs();
 	}
-	
+
 	public Set<String> getConfigCategories(String config) {
 		return this.provider.getConfigCategories(config);
 	}
