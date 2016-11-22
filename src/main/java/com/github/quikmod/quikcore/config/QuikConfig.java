@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *
@@ -117,6 +120,23 @@ public class QuikConfig {
 			QuikCore.getCoreLogger().trace(e);
 		}
 
+	}
+	
+	
+	public Stream<QuikConfigurable> getElements() {
+		return this.configurables
+				.values()
+				.stream()
+				.flatMap(l -> l.stream())
+				.map(e -> e.getAnnotation(QuikConfigurable.class));
+	}
+	
+	public Set<String> getConfigs() {
+		return this.provider.getConfigs();
+	}
+	
+	public Set<String> getConfigCategories(String config) {
+		return this.provider.getConfigCategories(config);
 	}
 
 	public boolean getBoolean(String config, String name, String category, boolean defaultValue, String comment) {

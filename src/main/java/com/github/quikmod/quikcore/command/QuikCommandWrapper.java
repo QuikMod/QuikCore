@@ -41,7 +41,7 @@ public class QuikCommandWrapper {
 		// Fetch Command Annotation
 		QuikCommand q = method.getAnnotation(QuikCommand.class);
 		if (q == null) {
-			throw new WrapperCreationException(method, "A quick command method must be annotated with @QuikCommand!");
+			throw new WrapperCreationException(method, "A quickcommand method must be annotated with @QuikCommand!");
 		}
 
 		// Handle Command Infomation

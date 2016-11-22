@@ -14,14 +14,14 @@ public class QuikLogManager {
 	
 	private final QuikLogAdapter adapter;
 	
-	private final Map<Object, QuikLogger> loggers;
+	private final Map<String, QuikLogger> loggers;
 
 	public QuikLogManager(QuikLogAdapter adapter) {
 		this.adapter = adapter;
 		this.loggers = new HashMap<>();
 	}
 	
-	public QuikLogger getLogger(Object source) {
+	public QuikLogger getLogger(String source) {
 		if (!loggers.containsKey(source)) {
 			QuikLogger logger = new QuikLogger(adapter, source);
 			QuikCore.getConfig().addConfigurable(logger);

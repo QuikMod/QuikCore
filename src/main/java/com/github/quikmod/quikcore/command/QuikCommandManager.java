@@ -5,15 +5,12 @@
  */
 package com.github.quikmod.quikcore.command;
 
-import com.github.quikmod.quikcore.core.QuikCore;
-import com.github.quikmod.quikcore.util.ReflectionHelper;
 import com.github.quikmod.quikcore.util.Tokenizer;
 import com.googlecode.concurrenttrees.common.KeyValuePair;
 import com.googlecode.concurrenttrees.radix.ConcurrentRadixTree;
 import com.googlecode.concurrenttrees.radix.RadixTree;
 import com.googlecode.concurrenttrees.radix.node.concrete.DefaultCharArrayNodeFactory;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -113,7 +110,7 @@ public final class QuikCommandManager {
 		}
 		List<KeyValuePair<QuikCommandWrapper>> options = this.getPossibleCommandsFor(tokens.pop()).collect(Collectors.toList());
 		if (options.isEmpty()) {
-			return QuikInvocationResult.fromAmbiguous(input);
+			return QuikInvocationResult.fromMissing(input);
 		} else if (options.size() > 1) {
 			return QuikInvocationResult.fromAmbiguous(input, (String[]) options.toArray());
 		} else {

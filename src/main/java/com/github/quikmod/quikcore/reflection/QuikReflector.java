@@ -27,7 +27,7 @@ public final class QuikReflector {
 				new ConfigurationBuilder().setScanners(
 						new SubTypesScanner(),
 						new TypeAnnotationsScanner()
-				).forPackages("")
+				).forPackages("com", "net", "org")
 		);
 		this.loaders = new ArrayList<>();
 	}

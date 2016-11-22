@@ -10,9 +10,13 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Properties;
 import com.github.quikmod.quikcore.config.QuikConfigAdapter;
+import com.github.quikmod.quikcore.util.TypeHelper;
 import java.io.BufferedReader;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -73,68 +77,78 @@ public class QuikDefaultConfig implements QuikConfigAdapter {
 	}
 
 	@Override
-	public boolean getBoolean(String config, String name, String category, boolean defaultValue, String comment) {
+	public Set<String> getConfigs() {
+		return TypeHelper.asSet("Default");
+	}
+
+	@Override
+	public Set<String> getConfigCategories(String config) {
+		return TypeHelper.asSet("Default");
+	}
+
+	@Override
+	public boolean getBoolean(String config, String category, String element, boolean defaultValue, String comment) {
 		final Properties props = this.getOrCreate(config);
-		if (props.get(name) != null) {
-			return Boolean.parseBoolean(props.getProperty(name));
+		if (props.get(element) != null) {
+			return Boolean.parseBoolean(props.getProperty(element));
 		} else {
-			props.setProperty(name, String.valueOf(defaultValue));
+			props.setProperty(element, String.valueOf(defaultValue));
 		}
 		return defaultValue;
 	}
 
 	@Override
-	public int getInt(String config, String name, String category, int defaultValue, int minValue, int maxValue, String comment) {
+	public int getInt(String config, String category, String element, int defaultValue, int minValue, int maxValue, String comment) {
 		final Properties props = this.getOrCreate(config);
-		if (props.get(name) != null) {
+		if (props.get(element) != null) {
 			try {
-				return Integer.parseInt(props.getProperty(name));
+				return Integer.parseInt(props.getProperty(element));
 			} catch (NumberFormatException e) {
-				QuikCore.getCoreLogger().warn("Bad configuration option for: " + category + ":" + name + "!");
+				QuikCore.getCoreLogger().warn("Bad configuration option for: " + category + ":" + element + "!");
 			}
 		} else {
-			props.setProperty(name, String.valueOf(defaultValue));
+			props.setProperty(element, String.valueOf(defaultValue));
 		}
 		return defaultValue;
 	}
 
 	@Override
-	public float getFloat(String config, String name, String category, float defaultValue, float minValue, float maxValue, String comment) {
+	public float getFloat(String config, String category, String element, float defaultValue, float minValue, float maxValue, String comment) {
 		final Properties props = this.getOrCreate(config);
-		if (props.get(name) != null) {
+		if (props.get(element) != null) {
 			try {
-				return Float.parseFloat(props.getProperty(name));
+				return Float.parseFloat(props.getProperty(element));
 			} catch (NumberFormatException e) {
-				QuikCore.getCoreLogger().warn("Bad Float for Config: " + category + ":" + name + "!");
+				QuikCore.getCoreLogger().warn("Bad Float for Config: " + category + ":" + element + "!");
 			}
 		} else {
-			props.setProperty(name, String.valueOf(defaultValue));
+			props.setProperty(element, String.valueOf(defaultValue));
 		}
 		return defaultValue;
 	}
 	
 	@Override
-	public double getDouble(String config, String name, String category, double defaultValue, double minValue, double maxValue, String comment) {
+	public double getDouble(String config, String category, String element, double defaultValue, double minValue, double maxValue, String comment) {
 		final Properties props = this.getOrCreate(config);
-		if (props.get(name) != null) {
+		if (props.get(element) != null) {
 			try {
-				return Double.parseDouble(props.getProperty(name));
+				return Double.parseDouble(props.getProperty(element));
 			} catch (NumberFormatException e) {
-				QuikCore.getCoreLogger().warn("Bad Double for Config: " + category + ":" + name + "!");
+				QuikCore.getCoreLogger().warn("Bad Double for Config: " + category + ":" + element + "!");
 			}
 		} else {
-			props.setProperty(name, String.valueOf(defaultValue));
+			props.setProperty(element, String.valueOf(defaultValue));
 		}
 		return defaultValue;
 	}
 
 	@Override
-	public String getString(String config, String name, String category, String defaultValue, String comment) {
+	public String getString(String config, String category, String element, String defaultValue, String comment) {
 		final Properties props = this.getOrCreate(config);
-		if (props.get(name) != null) {
-			return props.getProperty(name);
+		if (props.get(element) != null) {
+			return props.getProperty(element);
 		} else {
-			props.setProperty(name, defaultValue);
+			props.setProperty(element, defaultValue);
 		}
 		return defaultValue;
 	}
