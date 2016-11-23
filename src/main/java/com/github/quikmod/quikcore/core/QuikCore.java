@@ -65,7 +65,6 @@ public final class QuikCore {
 		QuikCore.converters.addConverters(clazz);
 		QuikCore.config.addConfigurable(clazz);
 		QuikCore.commands.addCommands(clazz);
-		QuikCore.getCoreLogger().info("Registered Core Registers!");
 	}
 
 	public static QuikLogger getCoreLogger() {

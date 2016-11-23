@@ -3,10 +3,14 @@
 package com.github.quikmod.quikcore.command;
 
 import com.github.quikmod.quikcore.core.QuikCore;
+import com.github.quikmod.quikcore.defaults.QuikDefaultConfig;
+import com.github.quikmod.quikcore.defaults.QuikDefaultLog;
+import com.github.quikmod.quikcore.defaults.QuikDefaultTranslator;
 import com.github.quikmod.quikcore.util.ReflectionHelper;
 import com.github.quikmod.quikcore.util.WrapperCreationException;
 import com.googlecode.concurrenttrees.common.KeyValuePair;
 import java.lang.reflect.Method;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -28,7 +32,7 @@ public class QuikCommandManagerTest {
 
 	@BeforeClass
 	public static void setUpClass() {
-		QuikCore.getCoreLogger().info("Preparing for CommandManager test.");
+		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")));
 	}
 
 	@AfterClass

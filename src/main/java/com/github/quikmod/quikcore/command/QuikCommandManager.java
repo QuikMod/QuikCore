@@ -5,8 +5,6 @@
  */
 package com.github.quikmod.quikcore.command;
 
-import com.github.quikmod.quikcore.reflection.Quik;
-import com.github.quikmod.quikcore.reflection.QuikRegister;
 import com.github.quikmod.quikcore.util.Tokenizer;
 import com.googlecode.concurrenttrees.common.KeyValuePair;
 import com.googlecode.concurrenttrees.radix.ConcurrentRadixTree;

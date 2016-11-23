@@ -6,6 +6,7 @@ import com.github.quikmod.quikcore.core.QuikCore;
 import com.github.quikmod.quikcore.util.ReflectionHelper;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,13 +26,14 @@ public class QuikRegisterRegistry {
 		ReflectionHelper
 				.streamMethods(clazz)
 				.filter(QuikRegisterRegistry::isRegisterMethod)
+				.peek(r -> QuikCore.getCoreLogger().info("Registered Register Method: {0}!", r.getName()))
 				.forEach(registers::add);
 	}
-	
+
 	public void performRegister(Class<?> clazz) {
 		this.registers.forEach(r -> performRegisterInvoke(r, clazz));
 	}
-	
+
 	private static void performRegisterInvoke(Method register, Class<?> clazz) {
 		try {
 			register.invoke(null, clazz);
@@ -41,12 +43,23 @@ public class QuikRegisterRegistry {
 	}
 
 	public static boolean isRegisterMethod(Method m) {
-		return m.isAnnotationPresent(QuikRegister.class)
-				&& m.getParameterCount() == 1
-				&& Class.class.isAssignableFrom(m.getParameters()[0].getType())
-				&& makeAccessable(m);
+		if (!m.isAnnotationPresent(QuikRegister.class)) {
+			// Nothing to log here, as not important.
+			return false;
+		} else if (!Modifier.isStatic(m.getModifiers())) {
+			QuikCore.getCoreLogger().debug("@QuikRegister methods must be static! {0} is not!", m.getName());
+			return false;
+		} else if (m.getParameterCount() != 1) {
+			QuikCore.getCoreLogger().debug("@QuikRegister methods must accept a single argument! {0} does not!", m.getName());
+			return false;
+		} else if (!Class.class.isAssignableFrom(m.getParameters()[0].getType())) {
+			QuikCore.getCoreLogger().debug("@QuikRegister methods must accept a class as an argument! {0} does not!", m.getName());
+			return false;
+		} else {
+			return makeAccessable(m);
+		}
 	}
-	
+
 	public static boolean makeAccessable(Method m) {
 		if (m.isAccessible()) {
 			return true;

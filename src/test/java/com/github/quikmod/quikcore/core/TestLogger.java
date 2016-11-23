@@ -2,7 +2,11 @@
  */
 package com.github.quikmod.quikcore.core;
 
+import com.github.quikmod.quikcore.defaults.QuikDefaultConfig;
+import com.github.quikmod.quikcore.defaults.QuikDefaultLog;
+import com.github.quikmod.quikcore.defaults.QuikDefaultTranslator;
 import com.github.quikmod.quikcore.log.QuikLogger;
+import java.nio.file.Paths;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -28,6 +32,8 @@ public class TestLogger {
 	
 	@Before
 	public void setUp() {
+		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")));
+		QuikCore.getCoreLogger().info("Preparing for CommandManager test.");
 	}
 	
 	@After

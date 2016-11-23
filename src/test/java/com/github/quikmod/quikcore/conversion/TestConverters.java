@@ -3,6 +3,10 @@
 package com.github.quikmod.quikcore.conversion;
 
 import com.github.quikmod.quikcore.core.QuikCore;
+import com.github.quikmod.quikcore.defaults.QuikDefaultConfig;
+import com.github.quikmod.quikcore.defaults.QuikDefaultLog;
+import com.github.quikmod.quikcore.defaults.QuikDefaultTranslator;
+import java.nio.file.Paths;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -21,6 +25,7 @@ public class TestConverters {
 
 	@BeforeClass
 	public static void setUpClass() {
+		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")));
 	}
 
 	@AfterClass
@@ -41,7 +46,7 @@ public class TestConverters {
 	// @Test
 	// public void hello() {}
 	@Test
-	public void testConfig() {
+	public void testConvert() {
 		Assert.assertEquals(1, (int)QuikCore.getConverters().convert(Integer.class, "1").get());
 		Assert.assertEquals(1.01f, (float)QuikCore.getConverters().convert(Float.class, "1.01").get(), 0);
 		Assert.assertEquals(1.01, (double)QuikCore.getConverters().convert(Double.class, "1.01").get(), 0);

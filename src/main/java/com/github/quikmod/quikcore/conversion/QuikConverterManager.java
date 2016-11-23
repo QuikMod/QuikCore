@@ -33,6 +33,7 @@ public final class QuikConverterManager {
 		if (converter != null) {
 			return converter.invoke(type, value);
 		} else {
+			QuikCore.getCoreLogger().debug("Missing converter for: {0}", type);
 			return Optional.empty();
 		}
 	}
@@ -49,6 +50,7 @@ public final class QuikConverterManager {
 		try {
 			final QuikConverterWrapper wrapper = new QuikConverterWrapper(m);
 			converters.putIfAbsent(wrapper.getReturnType(), wrapper);
+			QuikCore.getCoreLogger().debug("Registered converter method {0} for type {1}.", m.getName(), m.getReturnType().getName());
 		} catch (WrapperCreationException e) {
 			QuikCore.getCoreLogger().trace(e);
 		}

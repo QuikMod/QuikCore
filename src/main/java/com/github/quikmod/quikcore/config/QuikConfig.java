@@ -19,11 +19,11 @@ import java.util.stream.Stream;
  */
 public class QuikConfig {
 
-	private QuikConfigAdapter provider;
+	private final QuikConfigAdapter provider;
 
-	private Map<Object, List<Field>> configurables;
+	private final Map<Object, List<Field>> configurables;
 
-	private List<QuikConfigListener> configurationListeners;
+	private final List<QuikConfigListener> configurationListeners;
 
 	public QuikConfig(QuikConfigAdapter provider) {
 		this.configurables = new HashMap<>();

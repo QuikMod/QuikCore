@@ -4,10 +4,13 @@ package com.github.quikmod.quikcore.util;
 
 import com.github.quikmod.quikcore.core.QuikCore;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -80,12 +83,46 @@ public class ReflectionHelper {
 			}
 		}
 	}
-	
+
 	public static Stream<Method> streamMethods(Object from) {
 		final boolean isInstance = !(from instanceof Class);
 		final Class clazz = isInstance ? from.getClass() : (Class) from;
 		final Stream<Method> methods = Arrays.stream(clazz.getDeclaredMethods());
 		return isInstance ? methods : methods.filter(m -> Modifier.isStatic(m.getModifiers()));
+	}
+
+	public static boolean hasConstructorFor(Class<?> clazz, Class<?>... types) {
+		try {
+			Constructor<?> constructor = clazz.getConstructor(types);
+			return constructor != null;
+		} catch (SecurityException e) {
+			
+		} catch (NoSuchMethodException e) {
+
+		}
+		return false;
+	}
+
+	public static <T> Optional<T> attemptInstantiate(Class<T> clazz, Object... parameters) {
+		Class types[] = new Class[parameters.length];
+		for (int i = 0; i < parameters.length; i++) {
+			types[i] = parameters[i].getClass();
+		}
+		try {
+			return Optional.of(clazz.getConstructor(types).newInstance(parameters));
+		} catch (SecurityException | IllegalAccessException e) {
+			QuikCore.getCoreLogger().debug("Unable to access constructor for class {0}!", clazz.getName());
+		} catch (IllegalArgumentException e) {
+			QuikCore.getCoreLogger().error("The following error should not have occured!");
+			QuikCore.getCoreLogger().trace(e);
+		} catch (InstantiationException e) {
+			QuikCore.getCoreLogger().debug("Unable to instantiate class {0}!\nGiven reason is \"{1}\"!", clazz.getName(), e.getMessage());
+		} catch (InvocationTargetException e) {
+			QuikCore.getCoreLogger().debug("The constructor for class {0} threw an error!\nGiven reason is: \"{1}\"!", clazz.getName(), e.getCause());
+		} catch (NoSuchMethodException e) {
+			QuikCore.getCoreLogger().debug("The class {0} does not provide a constructor with parameters of types: {1}!", clazz.getName(), Arrays.asList(types));
+		}
+		return Optional.empty();
 	}
 
 }
