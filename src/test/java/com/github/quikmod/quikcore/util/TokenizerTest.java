@@ -1,0 +1,53 @@
+/*
+ */
+package com.github.quikmod.quikcore.util;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+/**
+ *
+ * @author Ryan
+ */
+public class TokenizerTest {
+
+	public TokenizerTest() {
+		new Tokenizer();
+	}
+
+	@BeforeClass
+	public static void setUpClass() {
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
+	}
+
+	@Before
+	public void setUp() {
+	}
+
+	@After
+	public void tearDown() {
+	}
+
+	/**
+	 * Test of tokenize method, of class Tokenizer.
+	 */
+	@Test
+	public void testTokenize() {
+		System.out.println("tokenize");
+		final String input = "\"Testing This\" 1 2    3\t4";
+		final Deque<String> expected = TypeHelper.asDeque("\"Testing This\"", "1", "2", "3", "4");
+		assertTrue(TypeHelper.areDequesEqual(expected, Tokenizer.tokenize(input)));
+	}
+
+}
