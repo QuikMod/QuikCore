@@ -12,7 +12,6 @@ import java.lang.reflect.Field;
 public class DummyConfig {
 	
 	@QuikConfigurable(
-			config = "Test",
 			category = "Core",
 			comment = "Is it true?",
 			key = "is_true"
@@ -20,7 +19,6 @@ public class DummyConfig {
 	public static boolean isTrue = false;
 	
 	@QuikConfigurable(
-			config = "Test",
 			category = "Core",
 			comment = "Give me an integer!",
 			key = "the_int"
@@ -28,7 +26,6 @@ public class DummyConfig {
 	public static int theInt = 10;
 	
 	@QuikConfigurable(
-			config = "Test",
 			category = "Core",
 			comment = "Float my boat!",
 			key = "the_float"
@@ -36,7 +33,6 @@ public class DummyConfig {
 	public static float theFloat = -1.25f;
 	
 	@QuikConfigurable(
-			config = "Test",
 			category = "Core",
 			comment = "1 <3 π!",
 			key = "the_double"
@@ -44,7 +40,6 @@ public class DummyConfig {
 	public static double theDouble = Math.PI;
 	
 	@QuikConfigurable(
-			config = "Test",
 			category = "Core",
 			comment = "Random String.",
 			key = "the_string"

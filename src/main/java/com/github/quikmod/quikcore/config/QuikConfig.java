@@ -3,6 +3,7 @@
 package com.github.quikmod.quikcore.config;
 
 import com.github.quikmod.quikcore.core.QuikCore;
+import com.github.quikmod.quikcore.reflection.exceptions.UnknownQuikDomainException;
 import com.github.quikmod.quikcore.util.ReflectionHelper;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -87,7 +88,7 @@ public class QuikConfig {
 			f.setAccessible(true);
 			Object obj = f.get(configurable);
 
-			String config = anno.config();
+			String config = QuikCore.getDomains().resolveDomain(f);
 			String key = anno.key();
 			String comment = anno.comment();
 
@@ -115,6 +116,8 @@ public class QuikConfig {
 
 		} catch (NumberFormatException e) {
 			QuikCore.getCoreLogger().debug("Invalid parameter bound!");
+		} catch (UnknownQuikDomainException e) {
+			e.printStackTrace();
 		} catch (IllegalAccessException | IllegalArgumentException | SecurityException e) {
 			QuikCore.getCoreLogger().trace(e);
 		}

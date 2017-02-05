@@ -20,7 +20,7 @@ import java.util.Set;
  *
  * @author RlonRyan
  */
-public class TypeHelper {
+public final class TypeHelper {
 
 	/**
 	 * Converts a collection of type A, to an array of type A.
@@ -212,28 +212,6 @@ public class TypeHelper {
 	 */
 	public static boolean isType(Class clazz, Class type) {
 		return type.isAssignableFrom(clazz);
-	}
-
-	/**
-	 * Tests if an object is null. Literally performs
-	 * {@code return obj == null}. This method exists for use as a lambda.
-	 *
-	 * @param obj the object to test.
-	 * @return if the object was null.
-	 */
-	public static boolean isNull(Object obj) {
-		return obj == null;
-	}
-
-	/**
-	 * Tests if an object is not null. Literally performs
-	 * {@code return obj != null}. This method exists for use as a lambda.
-	 *
-	 * @param obj the object to test.
-	 * @return if the object was not null.
-	 */
-	public static boolean isNonNull(Object obj) {
-		return obj != null;
 	}
 
 	/**

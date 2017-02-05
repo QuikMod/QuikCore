@@ -1,0 +1,22 @@
+/*
+ */
+package com.github.quikmod.quikcore.injection;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ *
+ * @author Ryan
+ */
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface QuikInjected {
+	
+	boolean optional() default false;
+	
+	boolean nullable() default false;
+	
+}

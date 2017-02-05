@@ -6,7 +6,8 @@ import com.github.quikmod.quikcore.core.QuikCore;
 import com.github.quikmod.quikcore.defaults.QuikDefaultConfig;
 import com.github.quikmod.quikcore.defaults.QuikDefaultLog;
 import com.github.quikmod.quikcore.defaults.QuikDefaultTranslator;
-import com.github.quikmod.quikcore.util.ReflectionHelper;
+import com.github.quikmod.quikcore.reflection.exceptions.UnknownQuikDomainException;
+import com.github.quikmod.quikcore.util.ReflectionStreams;
 import com.github.quikmod.quikcore.util.WrapperCreationException;
 import com.googlecode.concurrenttrees.common.KeyValuePair;
 import java.lang.reflect.Method;
@@ -88,9 +89,10 @@ public class QuikCommandManagerTest {
 	 * Test of registerCommand method, of class QuikCommandManager.
 	 *
 	 * @throws WrapperCreationException if the test method could not be wrapped.
+	 * @throws UnknownQuikDomainException if the test method has no domain.
 	 */
 	@Test
-	public void testRegisterCommand() throws WrapperCreationException {
+	public void testRegisterCommand() throws WrapperCreationException, UnknownQuikDomainException {
 		System.out.println("registerCommand");
 
 		// Setup
@@ -137,9 +139,10 @@ public class QuikCommandManagerTest {
 	 *
 	 * @throws WrapperCreationException if the test command could not be
 	 * instantiated.
+	 * @throws UnknownQuikDomainException if the test command has no domain.
 	 */
 	@Test
-	public void testInvoke() throws WrapperCreationException {
+	public void testInvoke() throws WrapperCreationException, UnknownQuikDomainException {
 		System.out.println("attemptAddCommand");
 
 		// Setup
@@ -167,8 +170,8 @@ public class QuikCommandManagerTest {
 
 	public static Method getCommand(String name) {
 		// We actually do want this to throw a null pointer exception in the case that the test is borked.
-		return ReflectionHelper
-				.streamMethods(QuikCommandManagerTest.class)
+		return ReflectionStreams
+				.streamAccessibleMethods(QuikCommandManagerTest.class)
 				.filter(m -> m.getName().equalsIgnoreCase(name))
 				.findAny()
 				.get();

@@ -15,7 +15,7 @@ public class QuikLogger implements QuikConfigurableInstance {
 	private final QuikLogAdapter adapter;
 	private final Object source;
 	
-	@QuikConfigurable(config = "QuikCore", key = "${log} Logging", category = "Logging", comment = "Set to true to enable logging on the ${log} channel.")
+	@QuikConfigurable(key = "${log} Logging", category = "Logging", comment = "Set to true to enable logging on the ${log} channel.")
 	private boolean enabled = true;
 
 	QuikLogger(QuikLogAdapter adapter, Object source) {

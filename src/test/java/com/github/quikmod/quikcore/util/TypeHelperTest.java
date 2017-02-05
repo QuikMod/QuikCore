@@ -24,6 +24,7 @@ import static org.junit.Assert.*;
 public class TypeHelperTest {
 	
 	public TypeHelperTest() {
+		// To get 100% coverage.
 		new TypeHelper();
 	}
 	
@@ -178,32 +179,6 @@ public class TypeHelperTest {
 		assertTrue(TypeHelper.isType("STRING", Object.class));
 		assertFalse(TypeHelper.isType("STRING", Number.class));
 		assertFalse(TypeHelper.isType("STRING", Boolean.class));
-	}
-
-	/**
-	 * Test of isNull method, of class TypeHelper.
-	 */
-	@Test
-	public void testIsNull() {
-		System.out.println("isNull");
-		assertTrue(TypeHelper.isNull(null));
-		assertFalse(TypeHelper.isNull(true));
-		assertFalse(TypeHelper.isNull(1));
-		assertFalse(TypeHelper.isNull(1.0));
-		assertFalse(TypeHelper.isNull("Not Null"));
-	}
-
-	/**
-	 * Test of isNonNull method, of class TypeHelper.
-	 */
-	@Test
-	public void testIsNonNull() {
-		System.out.println("isNonNull");
-		assertFalse(TypeHelper.isNonNull(null));
-		assertTrue(TypeHelper.isNonNull(true));
-		assertTrue(TypeHelper.isNonNull(1));
-		assertTrue(TypeHelper.isNonNull(1.0));
-		assertTrue(TypeHelper.isNonNull("Not Null"));
 	}
 
 	/**

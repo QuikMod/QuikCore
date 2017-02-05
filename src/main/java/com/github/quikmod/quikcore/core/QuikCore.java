@@ -9,9 +9,13 @@ import com.github.quikmod.quikcore.log.QuikLogManager;
 import com.github.quikmod.quikcore.log.QuikLogger;
 import com.github.quikmod.quikcore.config.QuikConfigAdapter;
 import com.github.quikmod.quikcore.conversion.QuikConverterManager;
+import com.github.quikmod.quikcore.injection.QuikInjector;
+import com.github.quikmod.quikcore.injection.QuikInjectorManager;
 import com.github.quikmod.quikcore.lang.QuikTranslationAdapter;
 import com.github.quikmod.quikcore.log.QuikLogAdapter;
 import com.github.quikmod.quikcore.reflection.Quik;
+import com.github.quikmod.quikcore.reflection.QuikDomain;
+import com.github.quikmod.quikcore.reflection.QuikDomains;
 import com.github.quikmod.quikcore.reflection.QuikReflector;
 import com.github.quikmod.quikcore.reflection.QuikRegister;
 
@@ -31,6 +35,8 @@ public final class QuikCore {
 	private static final QuikConverterManager converters = new QuikConverterManager();
 
 	private static final QuikCommandManager commands = new QuikCommandManager();
+	
+	private static final QuikInjectorManager injectors = new QuikInjectorManager();
 
 	private static final QuikReflector reflector = new QuikReflector();
 
@@ -42,17 +48,27 @@ public final class QuikCore {
 			QuikTranslationAdapter translatorAdaptor,
 			QuikConfigAdapter configAdaptor
 	) {
+		long start = System.currentTimeMillis();
 		QuikCore.logger = new QuikLogManager(logAdaptor);
 		QuikCore.translator = new QuikTranslator(translatorAdaptor);
 		QuikCore.config = new QuikConfig(configAdaptor);
 		QuikLogger log = QuikCore.getCoreLogger();
-		log.info("QuikCore Initialized!");
 		QuikCore.reflector.performLoad();
-		long start = System.currentTimeMillis();
-		log.info("Loading config!");
-		QuikCore.config.load();
 		long end = System.currentTimeMillis();
+		log.info("QuikCore Initialized! ({0} ms)", end - start);
+		
+		log.info("Performing injections!");
+		start = System.currentTimeMillis();
+		QuikCore.injectors.performInjections();
+		end = System.currentTimeMillis();
+		log.info("Performed Injections! ({0} ms)", end - start);
+		
+		log.info("Loading config!");
+		start = System.currentTimeMillis();
+		QuikCore.config.load();
+		end = System.currentTimeMillis();
 		log.info("Loaded config! ({0} ms)", end - start);
+		
 		log.info("Saving config!");
 		start = System.currentTimeMillis();
 		QuikCore.config.save();
@@ -62,6 +78,8 @@ public final class QuikCore {
 	
 	@QuikRegister
 	private static void registerClass(Class<?> clazz) {
+		QuikCore.injectors.registerInjectors(clazz);
+		QuikCore.injectors.registerInjectables(clazz);
 		QuikCore.converters.addConverters(clazz);
 		QuikCore.config.addConfigurable(clazz);
 		QuikCore.commands.addCommands(clazz);
@@ -71,6 +89,8 @@ public final class QuikCore {
 		return getLogger("QuikCore");
 	}
 
+	@QuikInjector
+	@QuikDomain("")
 	public static QuikLogger getLogger(String source) {
 		return logger.getLogger(source);
 	}
@@ -93,6 +113,14 @@ public final class QuikCore {
 
 	public static QuikConfig getConfig() {
 		return config;
+	}
+	
+	public static QuikDomains getDomains() {
+		return reflector.getDomains();
+	}
+	
+	public static QuikInjectorManager getInjectorManager() {
+		return injectors;
 	}
 
 }

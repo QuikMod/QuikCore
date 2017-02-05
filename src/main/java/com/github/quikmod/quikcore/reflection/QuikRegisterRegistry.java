@@ -3,7 +3,7 @@
 package com.github.quikmod.quikcore.reflection;
 
 import com.github.quikmod.quikcore.core.QuikCore;
-import com.github.quikmod.quikcore.util.ReflectionHelper;
+import com.github.quikmod.quikcore.util.ReflectionStreams;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -23,8 +23,8 @@ public class QuikRegisterRegistry {
 	}
 
 	public void registerRegisters(Class<?> clazz) {
-		ReflectionHelper
-				.streamMethods(clazz)
+		ReflectionStreams
+				.streamAccessibleMethods(clazz)
 				.filter(QuikRegisterRegistry::isRegisterMethod)
 				.peek(r -> QuikCore.getCoreLogger().info("Registered Register Method: {0}!", r.getName()))
 				.forEach(registers::add);

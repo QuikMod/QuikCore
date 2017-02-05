@@ -3,6 +3,7 @@
 package com.github.quikmod.quikcore.command;
 
 import com.github.quikmod.quikcore.core.QuikCore;
+import com.github.quikmod.quikcore.reflection.exceptions.UnknownQuikDomainException;
 import com.github.quikmod.quikcore.util.WrapperCreationException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -23,18 +24,19 @@ public class QuikCommandWrapper {
 	private final String name;
 	private final String info;
 	private final String perm;
+	private final String domain;
 	private final List<QuikParamWrapper> parameters;
 
 	public static final Optional<QuikCommandWrapper> attemptWrapperCreation(Method method) {
 		try {
 			return Optional.of(new QuikCommandWrapper(method));
-		} catch (WrapperCreationException e) {
+		} catch (WrapperCreationException | UnknownQuikDomainException e) {
 			QuikCore.getCoreLogger().trace(e);
 			return Optional.empty();
 		}
 	}
 
-	public QuikCommandWrapper(Method method) throws WrapperCreationException {
+	public QuikCommandWrapper(Method method) throws WrapperCreationException, UnknownQuikDomainException {
 		// Save method reference for invocation.
 		this.method = method;
 
@@ -48,6 +50,7 @@ public class QuikCommandWrapper {
 		this.name = q.name().trim().toLowerCase();
 		this.info = q.info().trim();
 		this.perm = q.perm().trim();
+		this.domain = QuikCore.getDomains().resolveDomain(method);
 
 		// Handle Parameters
 		this.parameters = new ArrayList<>(method.getParameterCount());
@@ -66,6 +69,10 @@ public class QuikCommandWrapper {
 
 	public String getPerm() {
 		return perm;
+	}
+
+	public String getDomain() {
+		return domain;
 	}
 
 	public QuikInvocationResult invoke(Map<String, String> paramMap) {
@@ -98,7 +105,7 @@ public class QuikCommandWrapper {
 
 	@Override
 	public String toString() {
-		return String.format("QuikCommandWrapper { method: \"%s\", name: \"%s\", info: \"%s\", perm: \"%s\", parameters: \"%s\" }", method, name, info, perm, parameters);
+		return String.format("QuikCommandWrapper { method: \"%s\", name: \"%s\", info: \"%s\", perm: \"%s\", domain: \"%s\", parameters: \"%s\" }", method, name, info, perm, domain, parameters);
 	}
 
 }

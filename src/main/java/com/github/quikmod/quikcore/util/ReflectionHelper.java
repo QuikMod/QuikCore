@@ -139,22 +139,6 @@ public class ReflectionHelper {
 		}
 	}
 
-	/**
-	 * Creates a stream of all the methods present in a given object or class
-	 * that are accessible in that context. I.e. if an object is passed then the
-	 * stream will include instance methods, but if a class is passed then
-	 * instance methods will not be included.
-	 *
-	 * @param from the object or class to stream the methods from.
-	 * @return a stream containing all the accessible methods for the class or object.
-	 */
-	public static Stream<Method> streamMethods(Object from) {
-		final boolean isInstance = !(from instanceof Class);
-		final Class clazz = isInstance ? from.getClass() : (Class) from;
-		final Stream<Method> methods = Arrays.stream(clazz.getDeclaredMethods());
-		return isInstance ? methods : methods.filter(m -> Modifier.isStatic(m.getModifiers()));
-	}
-
 	public static boolean hasConstructorFor(Class<?> clazz, Class<?>... types) {
 		try {
 			Constructor<?> constructor = clazz.getConstructor(types);

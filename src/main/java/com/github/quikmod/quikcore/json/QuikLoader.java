@@ -21,7 +21,7 @@ public final class QuikLoader {
 	
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-	@QuikConfigurable(config = "QuikCore", key = "Enable JSON Writeback", category = "Core", comment = "Set to false to disable automatic JSON writeback.")
+	@QuikConfigurable(key = "Enable JSON Writeback", category = "Core", comment = "Set to false to disable automatic JSON writeback.")
 	private static boolean writeback = true;
 	
 	private QuikLoader() {
