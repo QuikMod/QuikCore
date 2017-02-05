@@ -101,15 +101,15 @@ public class QuikConfig {
 			}
 
 			if (obj instanceof String) {
-				f.set(configurable, provider.getString(config, key, category, (String) obj, comment));
+				f.set(configurable, provider.getString(config, category, key, (String) obj, comment));
 			} else if (obj instanceof Boolean) {
-				f.set(configurable, provider.getBoolean(config, key, category, (boolean) obj, comment));
+				f.set(configurable, provider.getBoolean(config, category, key, (boolean) obj, comment));
 			} else if (obj instanceof Integer) {
-				f.set(configurable, provider.getInt(config, key, category, (int) obj, (int) anno.min(), (int) anno.max(), comment));
+				f.set(configurable, provider.getInt(config, category, key, (int) obj, (int) anno.min(), (int) anno.max(), comment));
 			} else if (obj instanceof Float) {
-				f.set(configurable, provider.getFloat(config, key, category, (float) obj, (float) anno.min(), (float) anno.max(), comment));
+				f.set(configurable, provider.getFloat(config, category, key, (float) obj, (float) anno.min(), (float) anno.max(), comment));
 			} else if (obj instanceof Double) {
-				f.set(configurable, provider.getDouble(config, key, category, (double) obj, anno.min(), anno.max(), comment));
+				f.set(configurable, provider.getDouble(config, category, key, (double) obj, anno.min(), anno.max(), comment));
 			} else {
 				QuikCore.getCoreLogger().debug("Bad Type: " + f.getType().toString());
 			}
@@ -140,24 +140,24 @@ public class QuikConfig {
 		return this.provider.getConfigCategories(config);
 	}
 
-	public boolean getBoolean(String config, String name, String category, boolean defaultValue, String comment) {
-		return this.provider.getBoolean(config, name, category, defaultValue, comment);
+	public boolean getBoolean(String config, String category, String key, boolean defaultValue, String comment) {
+		return this.provider.getBoolean(config, category, key, defaultValue, comment);
 	}
 
-	public int getInt(String config, String name, String category, int defaultValue, int minValue, int maxValue, String comment) {
-		return this.provider.getInt(config, name, category, defaultValue, minValue, maxValue, comment);
+	public int getInt(String config, String category, String key, int defaultValue, int minValue, int maxValue, String comment) {
+		return this.provider.getInt(config, category, key, defaultValue, minValue, maxValue, comment);
 	}
 
-	public float getFloat(String config, String name, String category, float defaultValue, float minValue, float maxValue, String comment) {
-		return this.provider.getFloat(config, name, category, defaultValue, minValue, maxValue, comment);
+	public float getFloat(String config, String category, String key, float defaultValue, float minValue, float maxValue, String comment) {
+		return this.provider.getFloat(config, category, key, defaultValue, minValue, maxValue, comment);
 	}
 
-	public double getDouble(String config, String name, String category, double defaultValue, double minValue, double maxValue, String comment) {
-		return this.provider.getDouble(config, name, category, defaultValue, minValue, maxValue, comment);
+	public double getDouble(String config, String category, String key, double defaultValue, double minValue, double maxValue, String comment) {
+		return this.provider.getDouble(config, category, key, defaultValue, minValue, maxValue, comment);
 	}
 
-	public String getString(String config, String name, String category, String defaultValue, String comment) {
-		return this.provider.getString(config, name, category, defaultValue, comment);
+	public String getString(String config, String category, String key, String defaultValue, String comment) {
+		return this.provider.getString(config, category, key, defaultValue, comment);
 	}
 
 	@Override
