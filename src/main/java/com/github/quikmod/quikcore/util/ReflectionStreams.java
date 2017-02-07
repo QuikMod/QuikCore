@@ -26,8 +26,8 @@ public final class ReflectionStreams {
 	 * constructors from.
 	 * @return a stream containing all the fields for the class or object.
 	 */
-	public static Stream<Constructor> streamConstructors(Object obj) {
-		return Arrays.stream(classify(obj).getConstructors());
+	public static Stream<Constructor> streamConstructors(Object from) {
+		return Arrays.stream(classify(from).getConstructors());
 	}
 
 	/**

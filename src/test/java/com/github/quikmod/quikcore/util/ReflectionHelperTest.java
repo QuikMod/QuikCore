@@ -33,7 +33,7 @@ public class ReflectionHelperTest {
 	/**
      * Test of forEachIn method, of class ReflectionHelper.
      */
-    @Test
+	@Test
     public void testForEachValue() {
         // Test Integers
         final int int_sum = int_a + int_b + int_c;

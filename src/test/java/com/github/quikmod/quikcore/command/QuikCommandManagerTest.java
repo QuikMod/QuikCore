@@ -159,13 +159,20 @@ public class QuikCommandManagerTest {
 				"nada",
 				"one test two --nope --noper",
 				"two --arg test --rand 1",
-				"three --arg test --rand 1 --nop -1"
+				"three --arg test --rand 1 --nop -1",
+				"t --arg test --rand 1",
+				"tw --arg test --rand 1",
+				"Nope Noper Nopest"
 		);
 		
-		
+		// Perform Invokations
 		for (String e : testCommands) {
-			System.out.println(instance.invoke(e));
+			QuikInvocationResult res = instance.invoke(e);
+			System.out.printf("\nCommand Invocation:\n\t- Input: %1$s\n\t- Status: %2$s\n\t- Output: %3$s\n", e, res.type, res.output);
 		}
+		
+		// New Line
+		System.out.println();
 	}
 
 	public static Method getCommand(String name) {
@@ -178,37 +185,37 @@ public class QuikCommandManagerTest {
 	}
 
 	@QuikCommand(name = "Zero", info = "Test command with no arguments. This is the most basic command possible.")
-	public static void zero() {
-		System.out.println("Command 'Zero' invokation success!");
+	public static String zero() {
+		return "Command 'Zero' invokation success!";
 	}
 
 	@QuikCommand(name = "nada", info = "Test command with no arguments. This is the most basic command possible.")
-	public static void nada() {
-		System.out.println("Command 'Nada' invokation success!");
+	public static String nada() {
+		return "Command 'Nada' invokation success!";
 	}
 
 	@QuikCommand(name = "one", info = "Test command with a single argument. This is the second most basic command possible.")
-	public static void one(
+	public static String one(
 			@QuikParam(tag = "arg", info = "Arg") String arg
 	) {
-		System.out.println("Command 'One' invokation success with string parameter \"" + arg + "\"!");
+		return "Command 'One' invokation success with string parameter \"" + arg + "\"!";
 	}
 	
 	@QuikCommand(name = "two", info = "Test command with more arguments.")
-	public static void two(
+	public static String two(
 			@QuikParam(tag = "arg", info = "Arg") String arg,
 			@QuikParam(tag = "rand", info = "Number") int rand
 	) {
-		System.out.println("Command 'One' invokation success with parameters: \"" + arg + "\" & " + rand + "!");
+		return "Command 'One' invokation success with parameters: \"" + arg + "\" & " + rand + "!";
 	}
 	
 	@QuikCommand(name = "three", info = "Test command with even more arguments.")
-	public static void three(
+	public static String three(
 			@QuikParam(tag = "arg", info = "Arg") String arg,
 			@QuikParam(tag = "rand", info = "Number") int rand,
 			@QuikParam(tag = "nop", info = "Integer") Integer nop
 	) {
-		System.out.println("Command 'One' invokation success with parameters: \"" + arg + "\" & " + rand + " & " + nop + "!");
+		return "Command 'One' invokation success with parameters: \"" + arg + "\" & " + rand + " & " + nop + "!";
 	}
 
 }

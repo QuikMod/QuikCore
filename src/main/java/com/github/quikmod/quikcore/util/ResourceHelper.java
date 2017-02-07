@@ -3,6 +3,7 @@
 package com.github.quikmod.quikcore.util;
 
 import com.github.quikmod.quikcore.core.QuikCore;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,13 +40,13 @@ public class ResourceHelper {
 				Files.createDirectories(to.getParent());
 				Files.copy(getResourceAsStream(from), to, StandardCopyOption.REPLACE_EXISTING);
 			}
-		} catch (Exception e) {
-			QuikCore.getLogger("AgriCraft").error(
+		} catch (IOException e) {
+			QuikCore.getCoreLogger().error(
 					"Unable to copy Jar resource: \"{0}\" to: \"{1}\"!",
 					from,
 					to
 			);
-			e.printStackTrace();
+			QuikCore.getCoreLogger().trace(e);
 		}
 	}
 

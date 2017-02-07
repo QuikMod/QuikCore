@@ -23,7 +23,7 @@ public class QuikDefaultTranslator implements QuikTranslationAdapter {
 	public final void setLocale(Locale locale) {
 		try {
 			this.locale = locale;
-			this.messages = ResourceBundle.getBundle("com.agricraft.agricore.localization.dictionary", locale);
+			this.messages = ResourceBundle.getBundle("com.github.quikmod.quikcore.localization.dictionary", locale);
 		} catch (MissingResourceException e) {
 			// Do nothing.
 		}

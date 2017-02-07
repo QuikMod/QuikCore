@@ -7,13 +7,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 /**
  * A class to aid in the execution of reflection magic.
@@ -101,6 +98,8 @@ public class ReflectionHelper {
 	 *
 	 * This method is designed to allow for reflection into any class without
 	 * having to worry about exceptions.
+	 * 
+	 * Internally uses the ReflectionStreams class.
 	 *
 	 * @param <A> the desired type of annotation to be present on the extracted
 	 * fields.
@@ -111,11 +110,10 @@ public class ReflectionHelper {
 	 * respective annotations.
 	 */
 	public static <A extends Annotation> void forEachFieldIn(Object from, Class<A> annotation, BiConsumer<Field, A> consumer) {
-		forEachFieldIn(from, (field) -> {
-			if (field.isAnnotationPresent(annotation)) {
-				consumer.accept(field, field.getAnnotation(annotation));
-			}
-		});
+		ReflectionStreams
+				.streamAccessibleFields(from)
+				.filter(f -> f.isAnnotationPresent(annotation))
+				.forEach(f -> consumer.accept(f, f.getAnnotation(annotation)));
 	}
 
 	/**
@@ -124,21 +122,28 @@ public class ReflectionHelper {
 	 *
 	 * This method is designed to allow for reflection into any class without
 	 * having to worry about exceptions.
+	 * 
+	 * Internally uses the ReflectionStreams class.
 	 *
 	 * @param from the class or object to extract values from.
 	 * @param consumer a function accepting the extracted fields, with
 	 * respective annotations.
 	 */
 	public static void forEachFieldIn(Object from, Consumer<Field> consumer) {
-		final boolean isInstance = !(from instanceof Class);
-		final Class clazz = isInstance ? from.getClass() : (Class) from;
-		for (Field f : clazz.getDeclaredFields()) {
-			if (isInstance || Modifier.isStatic(f.getModifiers())) {
-				consumer.accept(f);
-			}
-		}
+		ReflectionStreams
+				.streamAccessibleFields(from)
+				.forEach(consumer);
 	}
 
+	/**
+	 * Determines if a given class has a constructor with parameter types
+	 * matching the given types.
+	 *
+	 * @param clazz the class to search for a constructor in.
+	 * @param types the types of the parameters that the constructor should
+	 * accept.
+	 * @return if there exists a constructor matching the requisite parameters.
+	 */
 	public static boolean hasConstructorFor(Class<?> clazz, Class<?>... types) {
 		try {
 			Constructor<?> constructor = clazz.getConstructor(types);
@@ -151,6 +156,17 @@ public class ReflectionHelper {
 		return false;
 	}
 
+	/**
+	 * Attempts to instantiate a class by finding and invoking a constructor
+	 * that takes the given parameters, in order.
+	 *
+	 * @param <T> the type of the class to instantiate.
+	 * @param clazz the class to instantiate.
+	 * @param parameters the parameters that the class should be instantiated
+	 * with.
+	 * @return the new instance, or the empty optional if was unable to
+	 * instantiate with given parameters.
+	 */
 	public static <T> Optional<T> attemptInstantiate(Class<T> clazz, Object... parameters) {
 		Class types[] = new Class[parameters.length];
 		for (int i = 0; i < parameters.length; i++) {

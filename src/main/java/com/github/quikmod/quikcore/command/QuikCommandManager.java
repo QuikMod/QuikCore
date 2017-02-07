@@ -112,7 +112,11 @@ public final class QuikCommandManager {
 		if (options.isEmpty()) {
 			return QuikInvocationResult.fromMissing(input);
 		} else if (options.size() > 1) {
-			return QuikInvocationResult.fromAmbiguous(input, (String[]) options.toArray());
+			final String[] names = new String[options.size()];
+			for (int i = 0; i < options.size(); i++) {
+				names[i] = options.get(i).getKey().toString();
+			}
+			return QuikInvocationResult.fromAmbiguous(input, names);
 		} else {
 			return options.get(0).getValue().invoke(mapify(tokens));
 		}
