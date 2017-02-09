@@ -1,4 +1,4 @@
-# QuikCore [![build-status]][build-link]
+# QuikCore [![build-status]][build-link] [![release-badge]][release-link] 
 A better way to code MinecraftForge mods.
 
 ## Reasoning
@@ -23,3 +23,5 @@ QuikCore has no intention of generating all the code for you, like some other pr
 
 [build-link]:https://travis-ci.org/QuikMod/QuikCore
 [build-status]:https://travis-ci.org/QuikMod/QuikCore.svg?branch=master "Travis-CI Build Status"
+[release-link]:https://jitpack.io/#QuikMod/QuikCore
+[release-badge]:https://jitpack.io/v/QuikMod/QuikCore.svg
