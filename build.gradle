@@ -11,6 +11,7 @@ repositories {
 	jcenter()
 }
 
+// Dependencies
 dependencies {
 	compile 'com.googlecode.concurrent-trees:concurrent-trees:2.6.0'
 	compile 'com.googlecode.concurrent-trees:concurrent-trees:2.6.0:javadoc'
@@ -22,8 +23,27 @@ dependencies {
 	testCompile 'junit:junit:4.12:javadoc'
 }
 
+// Code Coverage
 jacocoTestReport {
 	group = "Reporting"
 	description = "Generate Jacoco coverage reports after running tests."
 	additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+}
+
+// Sources Jar
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+// Javadoc Jar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+// Artifacts
+artifacts {
+    archives sourcesJar
+    archives javadocJar
 }
