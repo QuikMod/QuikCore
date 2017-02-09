@@ -11,16 +11,26 @@ repositories {
 	jcenter()
 }
 
+// Configurations
+configurations {
+	javadoc {
+		transitive false
+	}
+	testJavadoc {
+		transitive false
+	}
+}
+
 // Dependencies
 dependencies {
 	compile 'com.googlecode.concurrent-trees:concurrent-trees:2.6.0'
-	compile 'com.googlecode.concurrent-trees:concurrent-trees:2.6.0:javadoc'
+	javadoc 'com.googlecode.concurrent-trees:concurrent-trees:2.6.0:javadoc'
 	compile 'org.reflections:reflections:0.9.10'
-	compile 'org.reflections:reflections:0.9.10:javadoc'
+	javadoc 'org.reflections:reflections:0.9.10:javadoc'
 	compile 'com.google.code.gson:gson:2.6.2'
-	compile 'com.google.code.gson:gson:2.6.2:javadoc'
+	javadoc 'com.google.code.gson:gson:2.6.2:javadoc'
     testCompile 'junit:junit:4.12'
-	testCompile 'junit:junit:4.12:javadoc'
+	testJavadoc 'junit:junit:4.12:javadoc'
 }
 
 // Code Coverage
