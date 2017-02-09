@@ -234,7 +234,7 @@ public final class TypeHelper {
 
 	/**
 	 * Advances the type of a primitive class to that of the wrapper class. I.e.
-	 * byte.class -> Byte.class.
+	 * byte.class -&gt; Byte.class.
 	 *
 	 * @param type the type-class to advance.
 	 * @return the advanced type-class.

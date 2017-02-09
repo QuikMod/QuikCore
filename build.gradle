@@ -1,40 +1,29 @@
 apply plugin: 'java'
 apply plugin: 'jacoco'
 
+archivesBaseName = 'quikcore'
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 repositories {
+	mavenLocal()
     mavenCentral()
-}
-
-configurations {
-	shade
-	compile.extendsFrom shade
+	jcenter()
 }
 
 dependencies {
-	shade 'com.googlecode.concurrent-trees:concurrent-trees:2.6.0'
-	shade 'com.googlecode.concurrent-trees:concurrent-trees:2.6.0:javadoc'
-	shade 'org.reflections:reflections:0.9.10'
-	shade 'org.reflections:reflections:0.9.10:javadoc'
-	shade 'com.google.code.gson:gson:2.6.2'
-	shade 'com.google.code.gson:gson:2.6.2:javadoc'
+	compile 'com.googlecode.concurrent-trees:concurrent-trees:2.6.0'
+	compile 'com.googlecode.concurrent-trees:concurrent-trees:2.6.0:javadoc'
+	compile 'org.reflections:reflections:0.9.10'
+	compile 'org.reflections:reflections:0.9.10:javadoc'
+	compile 'com.google.code.gson:gson:2.6.2'
+	compile 'com.google.code.gson:gson:2.6.2:javadoc'
     testCompile 'junit:junit:4.12'
 	testCompile 'junit:junit:4.12:javadoc'
-}
-
-jar {
-    configurations.shade.copyRecursive().setTransitive(false).each { artifact ->
-		from (zipTree(artifact)) {
-			exclude 'META-INF', 'META-INF/**'
-		}
-	}
 }
 
 jacocoTestReport {
 	group = "Reporting"
 	description = "Generate Jacoco coverage reports after running tests."
 	additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
-	
 }

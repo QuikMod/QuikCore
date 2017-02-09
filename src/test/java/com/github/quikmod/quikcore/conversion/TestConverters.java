@@ -7,12 +7,13 @@ import com.github.quikmod.quikcore.defaults.QuikDefaultConfig;
 import com.github.quikmod.quikcore.defaults.QuikDefaultLog;
 import com.github.quikmod.quikcore.defaults.QuikDefaultTranslator;
 import java.nio.file.Paths;
+import java.util.Optional;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -40,17 +41,17 @@ public class TestConverters {
 	public void tearDown() {
 	}
 
-	// TODO add test methods here.
-	// The methods must be annotated with annotation @Test. For example:
-	//
-	// @Test
-	// public void hello() {}
 	@Test
 	public void testConvert() {
-		Assert.assertEquals(1, (int)QuikCore.getConverters().convert(Integer.class, "1").get());
-		Assert.assertEquals(1.01f, (float)QuikCore.getConverters().convert(Float.class, "1.01").get(), 0);
-		Assert.assertEquals(1.01, (double)QuikCore.getConverters().convert(Double.class, "1.01").get(), 0);
-		Assert.assertEquals("1.01", QuikCore.getConverters().convert(String.class, "1.01").get());
+		assertEquals(1, (int) QuikCore.getConverters().convert(Integer.class, "1").get());
+		assertEquals(1.01f, (float) QuikCore.getConverters().convert(Float.class, "1.01").get(), 0);
+		assertEquals(1.01, (double) QuikCore.getConverters().convert(Double.class, "1.01").get(), 0);
+		assertEquals("1.01", QuikCore.getConverters().convert(String.class, "1.01").get());
+	}
+
+	@Test
+	public void testMissingConverter() {
+		assertEquals(Optional.empty(), QuikCore.getConverters().convert(TestConverters.class, "Does it matter?"));
 	}
 
 }
