@@ -5,6 +5,7 @@ package com.github.quikmod.quikcore.command;
 import com.github.quikmod.quikcore.core.QuikCore;
 import com.github.quikmod.quikcore.defaults.QuikDefaultConfig;
 import com.github.quikmod.quikcore.defaults.QuikDefaultLog;
+import com.github.quikmod.quikcore.defaults.QuikDefaultNetwork;
 import com.github.quikmod.quikcore.defaults.QuikDefaultTranslator;
 import com.github.quikmod.quikcore.reflection.exceptions.UnknownQuikDomainException;
 import com.github.quikmod.quikcore.util.ReflectionStreams;
@@ -33,7 +34,7 @@ public class QuikCommandManagerTest {
 
 	@BeforeClass
 	public static void setUpClass() {
-		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")));
+		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")), new QuikDefaultNetwork());
 	}
 
 	@AfterClass
@@ -133,6 +134,28 @@ public class QuikCommandManagerTest {
 		assertEquals(false, instance.attemptAddCommand(command1).isPresent());
 		assertEquals(false, instance.attemptAddCommand(command2).isPresent());
 	}
+	
+	/**
+	 * Test of addCommands method, of class QuikCommandManager.
+	 */
+	@Test
+	public void testAttemptAddCommands() {
+		System.out.println("attemptAddCommands");
+
+		// Setup
+		QuikCommandManager instance = new QuikCommandManager();
+		
+		// Add commands.
+		instance.addCommands(QuikCommandManagerTest.class);
+		
+		// Test all commands present.
+		assertFalse("Command 'Nope' doesn't exist.", instance.hasExactCommandFor("nope"));
+		assertTrue("Command 'Nada' present.", instance.hasExactCommandFor("nada"));
+		assertTrue("Command 'Zero' present.", instance.hasExactCommandFor("zero"));
+		assertTrue("Command 'One' present.", instance.hasExactCommandFor("one"));
+		assertTrue("Command 'Two' present.", instance.hasExactCommandFor("two"));
+		assertTrue("Command 'Three' present.", instance.hasExactCommandFor("three"));
+	}
 
 	/**
 	 * Test of attemptAddCommand method, of class QuikCommandManager.
@@ -155,6 +178,7 @@ public class QuikCommandManagerTest {
 
 		// Define Test Strings
 		List<String> testCommands = Arrays.asList(
+				"",
 				"zero",
 				"nada",
 				"one test two --nope --noper",
@@ -162,7 +186,8 @@ public class QuikCommandManagerTest {
 				"three --arg test --rand 1 --nop -1",
 				"t --arg test --rand 1",
 				"tw --arg test --rand 1",
-				"Nope Noper Nopest"
+				"Nope Noper Nopest",
+				"wat"
 		);
 		
 		// Perform Invokations
@@ -183,15 +208,15 @@ public class QuikCommandManagerTest {
 				.findAny()
 				.get();
 	}
+	
+	@QuikCommand(name = "nada", info = "Test command with no arguments. This is the most basic command possible.")
+	public static String nada() {
+		return "Command 'Nada' invokation success!";
+	}
 
 	@QuikCommand(name = "Zero", info = "Test command with no arguments. This is the most basic command possible.")
 	public static String zero() {
 		return "Command 'Zero' invokation success!";
-	}
-
-	@QuikCommand(name = "nada", info = "Test command with no arguments. This is the most basic command possible.")
-	public static String nada() {
-		return "Command 'Nada' invokation success!";
 	}
 
 	@QuikCommand(name = "one", info = "Test command with a single argument. This is the second most basic command possible.")

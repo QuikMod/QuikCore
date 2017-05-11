@@ -17,17 +17,17 @@ import com.github.quikmod.quikcore.config.QuikConfigurable;
  *
  * @author RlonRyan
  */
-public final class QuikLoader {
+public final class QuikJsonLoader {
 	
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
 	@QuikConfigurable(key = "Enable JSON Writeback", category = "Core", comment = "Set to false to disable automatic JSON writeback.")
 	private static boolean writeback = true;
 	
-	private QuikLoader() {
+	private QuikJsonLoader() {
 	}
 
-	public static void loadDirectory(Path dir, QuikLoadableRegistry... registries) {
+	public static void loadDirectory(Path dir, QuikJsonRegistry... registries) {
 		try (Stream<Path> stream = Files.walk(dir)) {
 			stream.forEach(p -> handleFile(dir, p, registries));
 		} catch (IOException e) {
@@ -35,15 +35,15 @@ public final class QuikLoader {
 		}
 	}
 
-	private static void handleFile(final Path root, Path location, QuikLoadableRegistry... registries) {
-		for (QuikLoadableRegistry r : registries) {
+	private static void handleFile(final Path root, Path location, QuikJsonRegistry... registries) {
+		for (QuikJsonRegistry r : registries) {
 			if (r.acceptsElement(location.getFileName().toString())) {
 				loadElement(root, location, r);
 			}
 		}
 	}
 
-	private static <T extends QuikSerializable> void loadElement(Path root, Path location, QuikLoadableRegistry<T> registry) {
+	private static <T extends QuikJsonElement> void loadElement(Path root, Path location, QuikJsonRegistry<T> registry) {
 
 		// The Element
 		T obj;
@@ -58,7 +58,6 @@ public final class QuikLoader {
 		// If fails, return.
 		try (Reader reader = Files.newBufferedReader(location)) {
 			obj = GSON.fromJson(reader, registry.getElementClass());
-			obj.setPath(root.relativize(location).toString().replaceAll("\\\\", "/"));
 		} catch (IOException | JsonParseException e) {
 			QuikCore.getCoreLogger().warn("Unable to load Element: \"{0}\"!", location);
 			QuikCore.getCoreLogger().trace(e);
@@ -68,7 +67,7 @@ public final class QuikLoader {
 		// Writeback, to keep file formatted.
 		// If fails, ignore.
 		if (writeback) {
-			QuikSaver.saveElement(location, obj);
+			QuikJsonSaver.saveElement(location, obj);
 		}
 
 		// Register the Element.

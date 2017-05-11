@@ -15,9 +15,9 @@ import org.reflections.util.ConfigurationBuilder;
  */
 public final class QuikReflector {
 
-	final Reflections reflections;
-	final QuikRegisterRegistry registers;
-	final QuikDomains domains;
+	private final Reflections reflections;
+	private final QuikRegisterRegistry registers;
+	private final QuikDomains domains;
 
 	public QuikReflector() {
 		this.reflections = new Reflections(
@@ -28,10 +28,6 @@ public final class QuikReflector {
 		);
 		this.registers = new QuikRegisterRegistry();
 		this.domains = new QuikDomains();
-	}
-
-	public QuikRegisterRegistry getRegisters() {
-		return registers;
 	}
 
 	public QuikDomains getDomains() {

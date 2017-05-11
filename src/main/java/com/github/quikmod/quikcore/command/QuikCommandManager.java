@@ -25,10 +25,10 @@ import java.util.stream.StreamSupport;
  * @author RlonRyan
  */
 public final class QuikCommandManager {
-	
+
 	public static final String MARKER = "--";
 	public static final int MARKER_LENGTH = MARKER.length();
-	
+
 	private final RadixTree<QuikCommandWrapper> commands;
 
 	/**
@@ -37,6 +37,10 @@ public final class QuikCommandManager {
 	 */
 	public QuikCommandManager() {
 		this.commands = new ConcurrentRadixTree<>(new DefaultCharArrayNodeFactory());
+	}
+
+	public boolean hasExactCommandFor(String input) {
+		return this.commands.getValueForExactKey(input.toLowerCase()) != null;
 	}
 
 	/**
@@ -91,7 +95,8 @@ public final class QuikCommandManager {
 	}
 
 	/**
-	 * Iterates through all the methods in a given class and attempts to add them as @QuikCommands.
+	 * Iterates through all the methods in a given class and attempts to add
+	 * them as @QuikCommands.
 	 *
 	 * @param clazz The class containing possible @QuikCommands.
 	 */
@@ -102,7 +107,7 @@ public final class QuikCommandManager {
 			}
 		}
 	}
-	
+
 	public QuikInvocationResult invoke(String input) {
 		Deque<String> tokens = Tokenizer.tokenize(input);
 		if (tokens.isEmpty()) {
@@ -121,7 +126,7 @@ public final class QuikCommandManager {
 			return options.get(0).getValue().invoke(mapify(tokens));
 		}
 	}
-	
+
 	public Map<String, String> mapify(Deque<String> input) {
 		Map<String, String> args = new HashMap<>();
 		while (!input.isEmpty()) {
@@ -142,5 +147,5 @@ public final class QuikCommandManager {
 		}
 		return args;
 	}
-	
+
 }

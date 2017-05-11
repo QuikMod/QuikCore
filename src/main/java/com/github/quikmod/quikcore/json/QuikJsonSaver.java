@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
@@ -17,25 +18,22 @@ import java.util.List;
  *
  * @author RlonRyan
  */
-public class QuikSaver {
+public class QuikJsonSaver {
 
 	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-	public static void saveElements(Path location, QuikSerializable... objects) {
-		saveElements(location, TypeHelper.asList(objects));
+	public static void saveElements(Path root, QuikJsonElement... objects) {
+		saveElements(root, TypeHelper.asList(objects));
 	}
 
-	public static void saveElements(Path location, List<? extends QuikSerializable> objects) {
+	public static void saveElements(Path root, List<? extends QuikJsonElement> objects) {
         //AgriCore.getCoreLogger().debug("Saving AgriSerializables To: {0}!", location);
-		objects.forEach(obj -> saveElement(location, obj));
+		objects.forEach(obj -> saveElement(root.resolve(obj.getId() + ".json"), obj));
         //AgriCore.getCoreLogger().debug("Finished Saving AgriSerializables To: {0}!", location);
 	}
 
-	public static void saveElement(Path location, QuikSerializable obj) {
+	public static void saveElement(Path location, QuikJsonElement obj) {
 		// Determine if need to autoname file.
-		if (location.getFileName().toString().indexOf('.') == -1) {
-			location = location.resolve(obj.getPath());
-		}
 		try {
 			Files.createDirectories(location.getParent());
 		} catch (IOException e) {

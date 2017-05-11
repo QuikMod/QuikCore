@@ -2,10 +2,7 @@
  */
 package com.github.quikmod.quikcore.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -20,7 +17,7 @@ import static org.junit.Assert.*;
 public class TokenizerTest {
 
 	public TokenizerTest() {
-		new Tokenizer();
+		System.out.println("Tokenizer Instance: " + new Tokenizer());
 	}
 
 	@BeforeClass

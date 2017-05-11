@@ -6,7 +6,7 @@ package com.github.quikmod.quikcore.json;
  *
  * @author RlonRyan
  */
-public interface QuikLoadableRegistry<T> {
+public interface QuikJsonRegistry<T> {
 	
 	boolean acceptsElement(String filename);
 	

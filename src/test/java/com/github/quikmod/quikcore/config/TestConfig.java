@@ -5,6 +5,7 @@ package com.github.quikmod.quikcore.config;
 import com.github.quikmod.quikcore.core.QuikCore;
 import com.github.quikmod.quikcore.defaults.QuikDefaultConfig;
 import com.github.quikmod.quikcore.defaults.QuikDefaultLog;
+import com.github.quikmod.quikcore.defaults.QuikDefaultNetwork;
 import com.github.quikmod.quikcore.defaults.QuikDefaultTranslator;
 import java.nio.file.Paths;
 import org.junit.After;
@@ -24,7 +25,7 @@ public class TestConfig {
 
 	@BeforeClass
 	public static void setUpClass() {
-		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")));
+		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")), new QuikDefaultNetwork());
 	}
 
 	@AfterClass

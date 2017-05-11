@@ -5,6 +5,7 @@ package com.github.quikmod.quikcore.reflection;
 import com.github.quikmod.quikcore.core.QuikCore;
 import com.github.quikmod.quikcore.defaults.QuikDefaultConfig;
 import com.github.quikmod.quikcore.defaults.QuikDefaultLog;
+import com.github.quikmod.quikcore.defaults.QuikDefaultNetwork;
 import com.github.quikmod.quikcore.defaults.QuikDefaultTranslator;
 import com.github.quikmod.quikcore.injection.QuikInjected;
 import com.github.quikmod.quikcore.injection.QuikInjector;
@@ -36,7 +37,7 @@ public class InjectorTest {
 	
 	@BeforeClass
 	public static void setUpClass() {
-		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")));
+		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")), new QuikDefaultNetwork());
 	}
 	
 	@AfterClass
