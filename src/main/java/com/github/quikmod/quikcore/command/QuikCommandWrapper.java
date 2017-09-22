@@ -3,6 +3,7 @@
 package com.github.quikmod.quikcore.command;
 
 import com.github.quikmod.quikcore.core.QuikCore;
+import com.github.quikmod.quikcore.reflection.QuikDomains;
 import com.github.quikmod.quikcore.reflection.exceptions.UnknownQuikDomainException;
 import com.github.quikmod.quikcore.util.WrapperCreationException;
 import java.lang.reflect.InvocationTargetException;
@@ -50,7 +51,7 @@ public class QuikCommandWrapper {
 		this.name = q.name().trim().toLowerCase();
 		this.info = q.info().trim();
 		this.perm = q.perm().trim();
-		this.domain = QuikCore.getDomains().resolveDomain(method);
+		this.domain = QuikDomains.resolveDomain(method);
 
 		// Handle Parameters
 		this.parameters = new ArrayList<>(method.getParameterCount());

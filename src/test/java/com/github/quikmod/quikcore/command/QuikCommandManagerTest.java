@@ -3,16 +3,11 @@
 package com.github.quikmod.quikcore.command;
 
 import com.github.quikmod.quikcore.core.QuikCore;
-import com.github.quikmod.quikcore.defaults.QuikDefaultConfig;
-import com.github.quikmod.quikcore.defaults.QuikDefaultLog;
-import com.github.quikmod.quikcore.defaults.QuikDefaultNetwork;
-import com.github.quikmod.quikcore.defaults.QuikDefaultTranslator;
 import com.github.quikmod.quikcore.reflection.exceptions.UnknownQuikDomainException;
 import com.github.quikmod.quikcore.util.ReflectionStreams;
 import com.github.quikmod.quikcore.util.WrapperCreationException;
 import com.googlecode.concurrenttrees.common.KeyValuePair;
 import java.lang.reflect.Method;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -34,7 +29,11 @@ public class QuikCommandManagerTest {
 
 	@BeforeClass
 	public static void setUpClass() {
-		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")), new QuikDefaultNetwork());
+        try {
+            QuikCore.setup();
+        } catch (Exception e) {
+            // Doesn't matter.
+        }
 	}
 
 	@AfterClass

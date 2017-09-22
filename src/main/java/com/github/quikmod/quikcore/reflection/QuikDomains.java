@@ -20,37 +20,41 @@ import java.util.Set;
  */
 public final class QuikDomains {
 
-	private final Set<String> domains;
-	private final ConcurrentInvertedRadixTree<String> domainTree;
-
-	public QuikDomains() {
-		// Initialize
-		this.domains = new HashSet<>();
-		this.domainTree = new ConcurrentInvertedRadixTree<>(new DefaultCharArrayNodeFactory());
+	private static final Set<String> DOMAINS;
+	private static final ConcurrentInvertedRadixTree<String> DOMAIN_TREE;
+    
+    static {
+        // Initialize
+		DOMAINS = new HashSet<>();
+		DOMAIN_TREE = new ConcurrentInvertedRadixTree<>(new DefaultCharArrayNodeFactory());
 		
 		// Manually add QuikCore
-		this.domains.add("quikcore");
-		this.domainTree.put("com.github.quikmod.quikcore", "quikcore");
-	}
+		DOMAINS.add("quikcore");
+		DOMAIN_TREE.put("com.github.quikmod.quikcore", "quikcore");
+    }
 
-	public String resolveDomain(Package pack) throws UnknownQuikDomainException {
+    private QuikDomains() {
+        // Nothing to see here.
+    }
+
+	public static String resolveDomain(Package pack) throws UnknownQuikDomainException {
 		return resolveDomain(pack.getName());
 	}
 	
-	public String resolveDomain(Class<?> clazz) throws UnknownQuikDomainException {
+	public static String resolveDomain(Class<?> clazz) throws UnknownQuikDomainException {
 		return resolveDomain(clazz.getName());
 	}
 	
-	public String resolveDomain(Member m) throws UnknownQuikDomainException {
+	public static String resolveDomain(Member m) throws UnknownQuikDomainException {
 		return resolveDomain(m.getDeclaringClass().getName() + "." + m.getName());
 	}
 
-	public String resolveDomain(String path) throws UnknownQuikDomainException {
+	public static String resolveDomain(String path) throws UnknownQuikDomainException {
 		// Format the path.
 		path = formatPath(path);
 
 		// Fetch the closest result.
-		final String domain = domainTree.getValueForLongestKeyPrefixing(path);
+		final String domain = DOMAIN_TREE.getValueForLongestKeyPrefixing(path);
 
 		// Determine if unknown domain.
 		if (domain == null) {
@@ -61,29 +65,29 @@ public final class QuikDomains {
 		return domain;
 	}
 	
-	public Optional<String> attemptResolveDomain(String path) {
-		return Optional.ofNullable(domainTree.getValueForLongestKeyPrefixing(formatPath(path)));
+	public static Optional<String> attemptResolveDomain(String path) {
+		return Optional.ofNullable(DOMAIN_TREE.getValueForLongestKeyPrefixing(formatPath(path)));
 	}
 	
-	public Optional<String> attemptResolveDomain(Member member) {
+	public static Optional<String> attemptResolveDomain(Member member) {
 		return attemptResolveDomain(member.getDeclaringClass().getName() + "." + member.getName());
 	}
 	
-	public Optional<String> attemptResolveDomain(Class<?> clazz) {
+	public static Optional<String> attemptResolveDomain(Class<?> clazz) {
 		return attemptResolveDomain(clazz.getName());
 	}
 	
-	public Optional<String> attemptResolveDomain(Package pack) {
+	public static Optional<String> attemptResolveDomain(Package pack) {
 		return attemptResolveDomain(pack.getName());
 	}
 	
-	protected void registerDomain(Package ctx) throws RegistrationConflictException {
+	protected static void registerDomain(Package ctx) throws RegistrationConflictException {
 		if (ctx.isAnnotationPresent(QuikDomain.class)) {
 			registerDomain(ctx.getAnnotation(QuikDomain.class).value(), ctx.getName());
 		}
 	}
 
-	protected void registerDomain(Class ctx) throws RegistrationConflictException {
+	protected static void registerDomain(Class ctx) throws RegistrationConflictException {
 		// Register local domain.
 		if (ctx.isAnnotationPresent(QuikDomain.class)) {
 			final String domain = ((QuikDomain) ctx.getAnnotation(ctx)).value();
@@ -91,16 +95,16 @@ public final class QuikDomains {
 		}
 
 		// Register Subdomains
-		ReflectionStreams.streamMembers(ctx).forEach(this::registerDomain);
+		ReflectionStreams.streamMembers(ctx).forEach(QuikDomains::registerDomain);
 	}
 
-	protected <T extends AccessibleObject & Member> void registerDomain(T ctx) throws RegistrationConflictException {
+	protected static <T extends AccessibleObject & Member> void registerDomain(T ctx) throws RegistrationConflictException {
 		if (ctx.isAnnotationPresent(QuikDomain.class)) {
 			registerDomain(ctx.getAnnotation(QuikDomain.class).value(), ctx.getDeclaringClass().getName() + "." + ctx.getName());
 		}
 	}
 
-	private void registerDomain(String id, String path) throws RegistrationConflictException {
+	private static void registerDomain(String id, String path) throws RegistrationConflictException {
 		// Format Path
 		path = formatPath(path);
 
@@ -108,7 +112,7 @@ public final class QuikDomains {
 		id = formatId(id);
 
 		// Fetch Previous
-		final String previous = this.domainTree.putIfAbsent(path, id);
+		final String previous = DOMAIN_TREE.putIfAbsent(path, id);
 
 		// Determine if Collison
 		if (id.equals(previous)) {
@@ -116,11 +120,11 @@ public final class QuikDomains {
 			// Why would you do such a thing?
 			return;
 		} else if (previous != null) {
-			throw new RegistrationConflictException(this, id, path, previous, "QuikDomain registration conflict!");
+			throw new RegistrationConflictException("QuikDomains", id, path, previous, "QuikDomain registration conflict!");
 		}
 
 		// Add Domain to Known Domains. Fin.
-		this.domains.add(id);
+		DOMAINS.add(id);
 	}
 
 	private static String formatPath(String path) {
@@ -135,7 +139,7 @@ public final class QuikDomains {
 
 	@Override
 	public String toString() {
-		return PrettyPrinter.prettyPrint(this.domainTree);
+		return PrettyPrinter.prettyPrint(this.DOMAIN_TREE);
 	}
 
 }

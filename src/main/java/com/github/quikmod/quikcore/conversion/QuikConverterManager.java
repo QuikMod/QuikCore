@@ -8,9 +8,8 @@ package com.github.quikmod.quikcore.conversion;
 import com.github.quikmod.quikcore.core.QuikCore;
 import com.github.quikmod.quikcore.util.WrapperCreationException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -18,18 +17,18 @@ import java.util.Optional;
  */
 public final class QuikConverterManager {
 
-	private final Map<Class<?>, QuikConverterWrapper> converters;
+	private static final ConcurrentHashMap<Class<?>, QuikConverterWrapper> CONVERTERS = new ConcurrentHashMap<>();
 
-	public QuikConverterManager() {
-		converters = new HashMap<>();
+    private QuikConverterManager() {
+        // Nothing to see here...
+    }
+
+	public static boolean hasConverterFor(Class<?> type) {
+		return CONVERTERS.containsKey(type);
 	}
 
-	public boolean hasConverterFor(Class<?> type) {
-		return converters.containsKey(type);
-	}
-
-	public <T> Optional<T> convert(Class<T> type, String value) {
-		final QuikConverterWrapper converter = converters.get(type);
+	public static <T> Optional<T> convert(Class<T> type, String value) {
+		final QuikConverterWrapper converter = CONVERTERS.get(type);
 		if (converter != null) {
 			return converter.invoke(type, value);
 		} else {
@@ -38,7 +37,7 @@ public final class QuikConverterManager {
 		}
 	}
 
-	public void addConverters(Class converterClass) {
+	public static void addConverters(Class converterClass) {
 		for (Method m : converterClass.getMethods()) {
 			if (m.isAnnotationPresent(QuikConverter.class)) {
 				addConverter(m);
@@ -46,10 +45,10 @@ public final class QuikConverterManager {
 		}
 	}
 
-	public void addConverter(Method m) {
+	public static void addConverter(Method m) {
 		try {
 			final QuikConverterWrapper wrapper = new QuikConverterWrapper(m);
-			converters.putIfAbsent(wrapper.getReturnType(), wrapper);
+			CONVERTERS.putIfAbsent(wrapper.getReturnType(), wrapper);
 			QuikCore.getCoreLogger().debug("Registered converter method {0} for type {1}.", m.getName(), m.getReturnType().getName());
 		} catch (WrapperCreationException e) {
 			QuikCore.getCoreLogger().trace(e);

@@ -2,6 +2,7 @@
  */
 package com.github.quikmod.quikcore.network;
 
+import com.github.quikmod.quikcore.core.QuikCore;
 import com.github.quikmod.quikcore.defaults.QuikDefaultNetwork;
 import java.nio.ByteBuffer;
 import org.junit.After;
@@ -22,6 +23,11 @@ public class QuikNetworkTest {
 	
 	@BeforeClass
 	public static void setUpClass() {
+        try {
+            QuikCore.setup();
+        } catch (Exception e) {
+            // Doesn't matter.
+        }
 	}
 	
 	@AfterClass

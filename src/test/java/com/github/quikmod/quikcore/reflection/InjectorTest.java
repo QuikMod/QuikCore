@@ -37,7 +37,11 @@ public class InjectorTest {
 	
 	@BeforeClass
 	public static void setUpClass() {
-		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")), new QuikDefaultNetwork());
+        try {
+            QuikCore.setup();
+        } catch (Exception e) {
+            // Doesn't matter.
+        }
 	}
 	
 	@AfterClass

@@ -3,11 +3,6 @@
 package com.github.quikmod.quikcore.conversion;
 
 import com.github.quikmod.quikcore.core.QuikCore;
-import com.github.quikmod.quikcore.defaults.QuikDefaultConfig;
-import com.github.quikmod.quikcore.defaults.QuikDefaultLog;
-import com.github.quikmod.quikcore.defaults.QuikDefaultNetwork;
-import com.github.quikmod.quikcore.defaults.QuikDefaultTranslator;
-import java.nio.file.Paths;
 import java.util.Optional;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -27,7 +22,11 @@ public class TestConverters {
 
 	@BeforeClass
 	public static void setUpClass() {
-		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")), new QuikDefaultNetwork());
+        try {
+            QuikCore.setup();
+        } catch (Exception e) {
+            // Doesn't matter.
+        }
 	}
 
 	@AfterClass
@@ -44,15 +43,15 @@ public class TestConverters {
 
 	@Test
 	public void testConvert() {
-		assertEquals(1, (int) QuikCore.getConverters().convert(Integer.class, "1").get());
-		assertEquals(1.01f, (float) QuikCore.getConverters().convert(Float.class, "1.01").get(), 0);
-		assertEquals(1.01, (double) QuikCore.getConverters().convert(Double.class, "1.01").get(), 0);
-		assertEquals("1.01", QuikCore.getConverters().convert(String.class, "1.01").get());
+		assertEquals(1, (int) QuikConverterManager.convert(Integer.class, "1").get());
+		assertEquals(1.01f, (float) QuikConverterManager.convert(Float.class, "1.01").get(), 0);
+		assertEquals(1.01, (double) QuikConverterManager.convert(Double.class, "1.01").get(), 0);
+		assertEquals("1.01", QuikConverterManager.convert(String.class, "1.01").get());
 	}
 
 	@Test
 	public void testMissingConverter() {
-		assertEquals(Optional.empty(), QuikCore.getConverters().convert(TestConverters.class, "Does it matter?"));
+		assertEquals(Optional.empty(), QuikConverterManager.convert(TestConverters.class, "Does it matter?"));
 	}
 
 }

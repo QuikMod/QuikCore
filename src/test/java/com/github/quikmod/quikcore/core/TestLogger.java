@@ -25,6 +25,11 @@ public class TestLogger {
 	
 	@BeforeClass
 	public static void setUpClass() {
+        try {
+            QuikCore.setup();
+        } catch (Exception e) {
+            // Doesn't matter.
+        }
 	}
 	
 	@AfterClass
@@ -33,7 +38,6 @@ public class TestLogger {
 	
 	@Before
 	public void setUp() {
-		QuikCore.init(new QuikDefaultLog(), new QuikDefaultTranslator(), new QuikDefaultConfig(Paths.get("config")), new QuikDefaultNetwork());
 		QuikCore.getCoreLogger().info("Preparing for CommandManager test.");
 	}
 	

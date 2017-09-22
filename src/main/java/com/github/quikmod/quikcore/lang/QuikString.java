@@ -2,7 +2,6 @@
  */
 package com.github.quikmod.quikcore.lang;
 
-import com.github.quikmod.quikcore.core.QuikCore;
 import com.google.gson.annotations.SerializedName;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +29,7 @@ public class QuikString {
 
 	@Override
 	public String toString() {
-		return this.translations.getOrDefault(QuikCore.getTranslator().getLocale(), normal);
+		return this.translations.getOrDefault(QuikTranslator.getLocale(), normal);
 	}
 	
 }

@@ -7,31 +7,31 @@ import com.github.quikmod.quikcore.util.ReflectionStreams;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
  * @author Ryan
  */
-public class QuikRegisterRegistry {
+public final class QuikRegisterRegistry {
 
-	private final Set<Method> registers;
+	private static final Set<Method> QUIK_REGISTERS = ConcurrentHashMap.newKeySet();
 
-	public QuikRegisterRegistry() {
-		this.registers = new HashSet<>();
-	}
+    private QuikRegisterRegistry() {
+        // Nothing to do here.
+    }
 
-	public void registerRegisters(Class<?> clazz) {
+	public static void registerRegisters(Class<?> clazz) {
 		ReflectionStreams
 				.streamAccessibleMethods(clazz)
 				.filter(QuikRegisterRegistry::isRegisterMethod)
 				.peek(r -> QuikCore.getCoreLogger().info("Registered Register Method: {0}!", r.getName()))
-				.forEach(registers::add);
+				.forEach(QUIK_REGISTERS::add);
 	}
 
-	public void performRegister(Class<?> clazz) {
-		this.registers.forEach(r -> performRegisterInvoke(r, clazz));
+	public static void performRegister(Class<?> clazz) {
+		QUIK_REGISTERS.forEach(r -> performRegisterInvoke(r, clazz));
 	}
 
 	private static void performRegisterInvoke(Method register, Class<?> clazz) {

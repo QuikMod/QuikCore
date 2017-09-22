@@ -3,6 +3,7 @@
 package com.github.quikmod.quikcore.injection;
 
 import com.github.quikmod.quikcore.core.QuikCore;
+import com.github.quikmod.quikcore.reflection.QuikDomains;
 import com.github.quikmod.quikcore.reflection.exceptions.UnknownQuikDomainException;
 import com.github.quikmod.quikcore.util.WrapperCreationException;
 import java.lang.reflect.Field;
@@ -49,7 +50,7 @@ public class QuikInjectedWrapper {
 
 		// Determine Domain
 		try {
-			this.domain = QuikCore.getDomains().resolveDomain(site);
+			this.domain = QuikDomains.resolveDomain(site);
 		} catch (UnknownQuikDomainException e) {
 			throw new WrapperCreationException(site, "A @QuikInjected must have a domain!", e);
 		}

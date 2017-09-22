@@ -3,13 +3,13 @@
 package com.github.quikmod.quikcore.injection;
 
 import com.github.quikmod.quikcore.core.QuikCore;
+import com.github.quikmod.quikcore.reflection.QuikDomains;
 import com.github.quikmod.quikcore.util.TypeHelper;
 import com.github.quikmod.quikcore.util.WrapperCreationException;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Objects;
 
 /**
  *
@@ -48,7 +48,7 @@ public class QuikInjectorWrapper {
 		}
 
 		// Fetch the domain. "" means valid for all domains.
-		this.domain = QuikCore.getDomains().attemptResolveDomain(injector).orElse("");
+		this.domain = QuikDomains.attemptResolveDomain(injector).orElse("");
 
 		// Set the name.
 		this.name = container + "#" + injector.getDeclaringClass().getName() + "." + injector.getName();

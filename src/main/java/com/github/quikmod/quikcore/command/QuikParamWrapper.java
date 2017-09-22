@@ -2,6 +2,7 @@
  */
 package com.github.quikmod.quikcore.command;
 
+import com.github.quikmod.quikcore.conversion.QuikConverterManager;
 import com.github.quikmod.quikcore.core.QuikCore;
 import com.github.quikmod.quikcore.util.TypeHelper;
 import com.github.quikmod.quikcore.util.WrapperCreationException;
@@ -33,7 +34,7 @@ public class QuikParamWrapper {
 		}
 		
 		// Check that type is valid.
-		if (!QuikCore.getConverters().hasConverterFor(type)) {
+		if (!QuikConverterManager.hasConverterFor(type)) {
 			throw new WrapperCreationException(method, parameter, "There exists no @QuikConverter capable of handling the given command argument of type '" + type + "'!");
 		}
 		
@@ -76,7 +77,7 @@ public class QuikParamWrapper {
 		if (value == null) {
 			return new QuikParamConversionResult(QuikResultType.MISSING_PARAM, this, value, this.type.isPrimitive() ? 0 : null);
 		}
-		Object actual = QuikCore.getConverters().convert(this.type, value).orElse(null);
+		Object actual = QuikConverterManager.convert(this.type, value).orElse(null);
 		if (actual == null && !this.isNullable()) {
 			return new QuikParamConversionResult(QuikResultType.BAD_PARAM, this, value, this.type.isPrimitive() ? 0 : null);
 		}
