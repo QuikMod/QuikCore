@@ -6,6 +6,10 @@
 package com.github.quikmod.quikcore.conversion;
 
 import com.github.quikmod.quikcore.core.QuikCore;
+import com.github.quikmod.quikcore.module.QuikModule;
+import com.github.quikmod.quikcore.module.event.QuikModuleEventClassLoad;
+import com.github.quikmod.quikcore.reflection.Quik;
+import com.github.quikmod.quikcore.util.ReflectionStreams;
 import com.github.quikmod.quikcore.util.WrapperCreationException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -16,6 +20,8 @@ import java.util.Optional;
  *
  * @author RlonRyan
  */
+@Quik
+@QuikModule(id = "quikcore_converters", name ="QuikCore Converter Manager Module")
 public final class QuikConverterManager {
 
 	private final Map<Class<?>, QuikConverterWrapper> converters;
@@ -37,6 +43,13 @@ public final class QuikConverterManager {
 			return Optional.empty();
 		}
 	}
+    
+    @QuikModule.Listener
+    public void onLoadClass(QuikModuleEventClassLoad ecl) {
+        ReflectionStreams.streamMethods(ecl.getClazz())
+                .filter(c -> c.isAnnotationPresent(QuikConverter.class))
+                .forEach(this::addConverter);
+    }
 
 	public void addConverters(Class converterClass) {
 		for (Method m : converterClass.getMethods()) {

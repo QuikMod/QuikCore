@@ -1,6 +1,6 @@
 /*
  */
-package com.github.quikmod.quikcore.reflection;
+package com.github.quikmod.quikcore.register;
 
 import com.github.quikmod.quikcore.core.QuikCore;
 import com.github.quikmod.quikcore.util.ReflectionStreams;
@@ -14,18 +14,18 @@ import java.util.Set;
  *
  * @author Ryan
  */
-public class QuikRegisterRegistry {
+public class QuikRegistry {
 
 	private final Set<Method> registers;
 
-	public QuikRegisterRegistry() {
+	public QuikRegistry() {
 		this.registers = new HashSet<>();
 	}
 
 	public void registerRegisters(Class<?> clazz) {
 		ReflectionStreams
 				.streamAccessibleMethods(clazz)
-				.filter(QuikRegisterRegistry::isRegisterMethod)
+				.filter(QuikRegistry::isRegisterMethod)
 				.peek(r -> QuikCore.getCoreLogger().info("Registered Register Method: {0}!", r.getName()))
 				.forEach(registers::add);
 	}
@@ -43,7 +43,7 @@ public class QuikRegisterRegistry {
 	}
 
 	public static boolean isRegisterMethod(Method m) {
-		if (!m.isAnnotationPresent(QuikRegister.class)) {
+		if (!m.isAnnotationPresent(QuikClassRegister.class)) {
 			// Nothing to log here, as not important.
 			return false;
 		} else if (!Modifier.isStatic(m.getModifiers())) {

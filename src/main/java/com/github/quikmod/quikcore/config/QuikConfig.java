@@ -3,6 +3,8 @@
 package com.github.quikmod.quikcore.config;
 
 import com.github.quikmod.quikcore.core.QuikCore;
+import com.github.quikmod.quikcore.module.QuikModule;
+import com.github.quikmod.quikcore.reflection.Quik;
 import com.github.quikmod.quikcore.reflection.exceptions.UnknownQuikDomainException;
 import com.github.quikmod.quikcore.util.ReflectionHelper;
 import java.lang.reflect.Field;

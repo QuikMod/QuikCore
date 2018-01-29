@@ -3,6 +3,7 @@
 package com.github.quikmod.quikcore.reflection;
 
 import com.github.quikmod.quikcore.core.QuikCore;
+import com.github.quikmod.quikcore.register.QuikRegistry;
 import java.util.stream.Stream;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -16,7 +17,7 @@ import org.reflections.util.ConfigurationBuilder;
 public final class QuikReflector {
 
 	private final Reflections reflections;
-	private final QuikRegisterRegistry registers;
+	private final QuikRegistry registers;
 	private final QuikDomains domains;
 
 	public QuikReflector() {
@@ -26,7 +27,7 @@ public final class QuikReflector {
 						new TypeAnnotationsScanner()
 				).forPackages("com", "net", "org")
 		);
-		this.registers = new QuikRegisterRegistry();
+		this.registers = new QuikRegistry();
 		this.domains = new QuikDomains();
 	}
 

@@ -129,6 +129,8 @@ public final class ReflectionStreams {
 	 *
 	 * @param obj the object to determine the class value of.
 	 * @return the class value of the object.
+     * 
+     * @throws NullPointerException if the given object is null, and therefore unclassifiable.
 	 */
 	public static Class<?> classify(Object obj) {
 		return (obj instanceof Class) ? (Class) obj : obj.getClass();

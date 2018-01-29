@@ -14,6 +14,29 @@ public class WrapperCreationException extends Exception {
 
 	public static final String FORMAT = "%1$s: %3$s.%2$s %4$s";
 
+    /**
+	 * Constructs an instance of <code>WrapperCreationException</code> with
+	 * the specified detail message.
+	 *
+	 * @param clazz the class that was being wrapped.
+	 * @param reason the reason for the creation error.
+	 */
+	public WrapperCreationException(Class clazz, String reason) {
+		super(String.format(FORMAT, "Class Wrapper", "*", clazz.getName(), reason));
+	}
+    
+    /**
+	 * Constructs an instance of <code>WrapperCreationException</code> with
+	 * the specified detail message.
+	 *
+	 * @param clazz the class that was being wrapped.
+	 * @param reason the reason for the creation error.
+	 * @param cause the exception that caused the exception.
+	 */
+	public WrapperCreationException(Class clazz, String reason, Exception cause) {
+		super(String.format(FORMAT, "Class Wrapper", "*", clazz.getName(), reason), cause);
+	}
+    
 	/**
 	 * Constructs an instance of <code>WrapperCreationException</code> with
 	 * the specified detail message.

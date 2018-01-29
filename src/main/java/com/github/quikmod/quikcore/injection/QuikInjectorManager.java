@@ -3,6 +3,9 @@
 package com.github.quikmod.quikcore.injection;
 
 import com.github.quikmod.quikcore.core.QuikCore;
+import com.github.quikmod.quikcore.module.QuikModule;
+import com.github.quikmod.quikcore.module.event.QuikModuleEventClassLoad;
+import com.github.quikmod.quikcore.reflection.Quik;
 import com.github.quikmod.quikcore.util.ReflectionStreams;
 import com.github.quikmod.quikcore.util.RegistrationConflictException;
 import com.github.quikmod.quikcore.util.WrapperCreationException;
@@ -19,6 +22,8 @@ import java.util.stream.Stream;
  *
  * @author Ryan
  */
+@Quik
+@QuikModule(id = "quikcore_injection", name = "QuikCore Injection Module")
 public class QuikInjectorManager {
 
 	private final Map<String, Set<QuikInjectedWrapper>> targets;
@@ -71,6 +76,12 @@ public class QuikInjectorManager {
 			performInjectionsFor(injector);
 		}
 	}
+    
+    @QuikModule.Listener
+    public synchronized void onLoadClass(QuikModuleEventClassLoad ecl) {
+        this.registerInjectors(ecl.getClazz());
+        this.registerInjectables(ecl.getClazz());
+    }
 
 	public synchronized void registerInjectables(Object container) {
 		final Object obj = (container instanceof Class) ? null : container;
